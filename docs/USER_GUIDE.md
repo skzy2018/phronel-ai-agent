@@ -68,16 +68,22 @@ The TUI is divided into **four tabs** (which can be switched via mouse click or 
     *   `Approve Selected`: Marks a draft as "approved".
     *   `Execute Selected`: Sends approved drafts directly to X (via Tweepy).
     *   `Reject Selected`: Deletes or rejects drafts.
+    *   **Double-click / Enter Row**: Opens the **Action Detail Modal**. If the action is a `reply` or `like`, it automatically fetches the entire **conversation thread history** (up to 10 turns) in the background and renders it as a chronological dialogue script, enabling you to inspect the full context before approving!
 *   **Knowledge Base Tab**:
-    *   **Source List**: Left pane showing all ingested sources (files, URLs).
-    *   **Source Content Preview**: Right pane showing interactive JIT text chunk previews of the selected source.
+    *   **Source List**: Left pane showing all ingested sources (files, URLs), including a **`Linked`** column displaying checkmarks (`[ ✔ ] Yes` / `[   ] No`) showing which resources are authorized for the active persona.
+    *   **Source Content Preview**: Right pane showing interactive JIT text chunk previews of the selected source (RowHighlighted follows arrow/mouse instant sync).
     *   **`[ + Learn Material (File/URL) ]` Button**: Opens a popup modal to enter local file paths or web URLs. It auto-detects and crawls the content immediately.
+    *   **`[ Link/Unlink Active Persona ]` Button**: Toggles RAG knowledge authorization for the currently active persona instantly!
     *   **`[ Delete Selected ]` Button**: Synced deletion of the selected source from both SQLite and ChromaDB to prevent outdated information or hallucinations.
 *   **Persona Settings Tab**:
     *   Visual CRUD editor for managing agent personas.
     *   **Registered Personas (Left Pane)**: Displays all configured personas and indicates which one is actively running (★ Active).
-    *   **Edit Form (Right Pane)**: Update name, professional role, tone of voice, constraints, and sales strategy guidelines dynamically.
+    *   **Edit Form (Right Pane)**: Update name, professional role, tone of voice, constraints, sales strategy guidelines dynamically.
+    *   **Search Keywords**: Configure specific keywords (supports **comma-separated lists** like `AI, Python, LLM` for multiple parallel trend searches) to make this persona monitor and reply to specific domains!
     *   **Control Buttons**: Save edits, create new templates, activate selected persona instantly, or safely delete inactive configurations.
+
+### Tab Transition Auto-Sync (JIT UX)
+Whenever you switch tabs in the TUI, the interface **automatically runs a background JIT synchronization cycle**, keeping all data tables, checkboxes, and link checkmarks 100% up to date without needing manual Refresh clicks!
 
 ### Keyboard Shortcuts
 - `s`: Manually trigger one full autonomous cycle (Search ➔ Strategy ➔ Generate).

@@ -61,7 +61,7 @@ Some run-time configurations, such as `execution_mode` and `observe_keyword`, ut
 | **`PHRONEL_LLM_MODEL`** | `gemini-2.5-flash` | **Infrastructure**: Default Google Gemini model used for inference. |
 | **`PHRONEL_OPTIMIZED_PROMPT_PATH`** | `phronel_ai_agent/core/optimized_creator.json` | **Infrastructure**: Local JSON path where DSPy-optimized prompts are loaded/saved. |
 | **`PHRONEL_EXECUTION_MODE`** | `manual` | **Hybrid**: Fallback execution mode if not found in the SQLite DB. |
-| **`PHRONEL_OBSERVE_KEYWORD`** | `AI エージェント` | **Hybrid**: Fallback search keyword if not found in the SQLite DB. |
+| **`PHRONEL_MAX_RESULTS`** | `10` | **Infrastructure**: Limit on how many tweets to fetch from X per search loop to control API cost. |
 | **`PHRONEL_GEMINI_API_KEY`** | `None` | **Credential**: Gemini API Key (takes precedence over the db `gemini_api_key` setting). |
 | **`PHRONEL_X_BEARER_TOKEN`** | `None` | **Credential**: X OAuth 2.0 Bearer Token. |
 | **`PHRONEL_X_API_KEY`** | `None` | **Credential**: X API Key (Consumer Key). |
@@ -86,4 +86,20 @@ You can perform visual CRUD actions on these records via the TUI's "Persona Sett
 | **`tone`** | `VARCHAR` | `"Professional, ..."` | Tone of voice. Maps to DSPy's `style` parameter, controlling emojis and phrasing. |
 | **`constraints`** | `VARCHAR` | `"Max 280 chars..."` | Formatting and length limits. Maps to DSPy's `constraints` parameter. |
 | **`sales_strategy`**| `VARCHAR` | `"Focus on value..."` | Core business strategy and policy guidelines. Maps to DSPy's `strategy` parameter. |
+| **`observe_keyword`**| `VARCHAR` | `None` | Comma-separated search keywords (e.g. `AI, Python, LLM`) used dynamically during trend monitoring. |
 | **`is_active`** | `BOOLEAN` | `True` / `False` | Activation flag. The active persona is fetched dynamically at runtime via `get_active_persona()`. |
+
+---
+
+## 6. Persona & Knowledge Link Table (`PersonaSourceLink`)
+
+To support N:N RAG knowledge relationships where multiple personas can freely share or separate specific resources (files/URLs), authorized knowledge links are managed in an independent junction table: **`PersonaSourceLink`**.
+
+### Schema Fields
+
+| Column Name | Data Type | Default Value | Description |
+| :--- | :--- | :--- | :--- |
+| **`persona_id`** | `INTEGER` (PK, FK) | None | Foreign key linking to `AgentPersona.id`. |
+| **`source`** | `VARCHAR` (PK) | None | Unique string representing the file path or web URL source name. |
+
+At runtime, ChromaDB is dynamically queried with an `$in` metadata filter on `source` matching the currently authorized list from this table, preventing cross-persona RAG hallucinations.

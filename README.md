@@ -9,16 +9,18 @@ Unlike traditional static tweet bots, Phronel uses **DSPy** (the programming-not
 ## Key Features
 
 - 🧠 **Cognitive Agent (DSPy-Powered)**: Leverages LLMs (like Google Gemini) to analyze trend sentiments, determine strategic angles, and output optimal actions (Tweet, Reply, Like, or Standby) tied directly to real tweet IDs.
-- 👥 **Multi-Persona Settings (SQLModel)**: Offers a dedicated `AgentPersona` database table. Easily register, edit, and swap multiple characters (names, roles, tones, posting constraints, and sales guidelines) visually from the TUI.
+- 💬 **Thread Conversation Support (V2 API / Mock / New!)**: Maintains and understands past conversation history (up to 10 turns) instead of replying in isolation. Intelligently parses, chronologically sorts, and formats dialogues (`User: ... \n Agent (Persona Name): ...`) into the DSPy GenerateReply generator. RAG queries search using both target tweets and thread contexts, resolving pronouns and context (like "it", "where") flawlessly.
+- 👥 **Multi-Persona Settings (SQLModel & Persona-RAG Linking)**: Offers a dedicated `AgentPersona` database table. Easily register, edit, and swap multiple characters (names, roles, tones, posting constraints, specific search keywords, and sales guidelines) visually from the TUI. Features a junction table (`PersonaSourceLink`) to isolate and assign specific RAG resources to individual personas, preventing cross-persona hallucinations.
 - 📊 **RAG Knowledge Base (ChromaDB + Web Crawler)**: Ingests local Markdown/Text files or scrapes any public URL to strip away HTML noise and crawl pure article content into a local Vector Database (ChromaDB).
-- 🖥️ **Rich Terminal User Interface (TUI)**: A beautiful console dashboard powered by Textual:
-  - **Dashboard Tab**: Real-time log streamer and background scheduler monitors.
-  - **Action Review Tab**: Review, approve (Approve), and publish (Execute) AI-generated proposals.
-  - **Knowledge Base Tab**: Manage ingested sources, scroll-preview text chunks dynamically, and prune old information.
-  - **Persona Settings Tab**: Dynamically configure and hot-swap active agent personalities.
+- 🖥️ **Rich Terminal User Interface (TUI & JIT Sync UX)**: A beautiful console dashboard powered by Textual:
+  - **Dashboard Tab**: Real-time log streamer and background scheduler monitors. Runs multiple persona-assigned keywords in loop searches.
+  - **Action Review Tab**: Review, approve (Approve), and publish (Execute) AI-generated proposals. Row double-clicks trigger the **Action Detail Modal**, which dynamically loads the chronological conversation history in a non-blocking background thread.
+  - **Knowledge Base Tab**: Manage ingested sources, scroll-preview text chunks dynamically, assign/unassign sources to the active persona, and prune old information.
+  - **Persona Settings Tab**: Dynamically configure, edit search keywords, and hot-swap active agent personalities.
+  - **JIT Auto-Sync**: Switching tabs automatically triggers a background data refresh, synchronizing all checkmarks and status tables immediately.
 - ⚙️ **Flexible Execution Modes**:
   - Supports `manual` (interactive), `semi-auto` (propose automatically, post manually), `auto` (fully autonomous), and `dry-run` (simulated execution without API expenses).
-  - Implements a hybrid config hierarchy prioritizing database settings over environment variables.
+  - Implements a hybrid config hierarchy prioritizing database settings over environment variables. Uses `PHRONEL_MAX_RESULTS` to control API consumption.
 
 ---
 
