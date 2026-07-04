@@ -24,12 +24,51 @@ class ActionDetailModal(ModalScreen[None]):
                 yield Label(f"Type: [bold]{self.action.action_type}[/bold]\n"
                             f"Status: [bold]{self.action.status}[/bold]\n"
                             f"Created At: {self.action.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                            f"Target ID: [cyan]{self.action.target_id or 'N/A'}[/cyan]\n"
                             f"Executed At: {self.action.executed_at.strftime('%Y-%m-%d %H:%M:%S') if self.action.executed_at else 'N/A'}",
                             classes="modal_meta")
+                
+                # Show conversation context if this is a reply or like
+                if self.action.action_type in ["reply", "like"] and self.action.target_id:
+                    yield Label("\n[bold yellow]Conversation Thread (会話スレッドコンテキスト)[/bold yellow]")
+                    yield Static("Loading thread conversation context...", id="modal_thread_loading")
+                    
+                yield Label("\n[bold green]Proposed Output Text (生成テキスト)[/bold green]")
                 yield Static(self.action.content or "", id="modal_content")
             
             with Horizontal(id="modal_buttons"):
                 yield Button("Close", id="btn_close", variant="primary")
+
+    def on_mount(self) -> None:
+        if self.action.action_type in ["reply", "like"] and self.action.target_id:
+            self.load_thread_context()
+
+    @work(exclusive=True)
+    async def load_thread_context(self) -> None:
+        from ...services.x_client import x_client
+        try:
+            # Dynamically fetch conversation history in background thread to keep UI interactive
+            raw_thread = await asyncio.to_thread(x_client.get_conversation_thread, self.action.target_id)
+            if raw_thread:
+                from ...core.db import get_active_persona
+                active_p = get_active_persona()
+                persona_name = active_p.name if active_p else "Agent"
+                
+                sorted_thread = sorted(raw_thread, key=lambda x: x.get("created_at", ""))
+                lines = []
+                for t in sorted_thread:
+                    text = t.get("text", "").strip()
+                    if t.get("is_agent", False):
+                        lines.append(f"[bold green]{persona_name} (Agent):[/bold green] {text}")
+                    else:
+                        lines.append(f"[bold cyan]User:[/bold cyan] {text}")
+                
+                thread_text = "\n".join(lines)
+                self.query_one("#modal_thread_loading", Static).update(thread_text)
+            else:
+                self.query_one("#modal_thread_loading", Static).update("[dim]No prior conversation history found for this tweet.[/dim]")
+        except Exception as e:
+            self.query_one("#modal_thread_loading", Static).update(f"[red]Error loading thread context: {e}[/red]")
 
     @on(Button.Pressed, "#btn_close")
     def close_modal(self) -> None:

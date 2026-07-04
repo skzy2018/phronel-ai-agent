@@ -30,9 +30,10 @@ class GenerateTweet(dspy.Signature):
     tweet_text = dspy.OutputField(desc="The generated tweet text, ready for posting.")
 
 class GenerateReply(dspy.Signature):
-    """Generate a helpful and contextual reply to a specific tweet."""
+    """Generate a helpful and contextual reply to a specific tweet, considering the conversation thread history."""
     
     target_tweet = dspy.InputField(desc="The tweet being replied to.")
+    conversation_history = dspy.InputField(desc="The conversation history of the thread (e.g. 'User: ... \\n Agent: ...') to maintain context.")
     strategy = dspy.InputField(desc="The strategy or goal for this reply.")
     knowledge_context = dspy.InputField(desc="Reference information to answer questions or add value.")
     style = dspy.InputField(desc="Professional, polite, and helpful.")
@@ -74,7 +75,23 @@ class Creator(dspy.Module):
     def _get_knowledge(self, topic: str):
         knowledge_context = ""
         try:
-            retrieved_chunks = knowledge_base.query(query_text=topic, n_results=3)
+            from ..core.db import get_active_persona, list_linked_sources
+            persona = get_active_persona()
+            where_filter = None
+            
+            if persona and persona.id:
+                linked_sources = list_linked_sources(persona.id)
+                if linked_sources:
+                    if len(linked_sources) == 1:
+                        where_filter = {"source": linked_sources[0]}
+                    else:
+                        where_filter = {"source": {"$in": linked_sources}}
+                    logger.info(f"[Creator] Filtering RAG knowledge to sources linked to Persona '{persona.name}': {linked_sources}")
+                else:
+                    logger.info(f"[Creator] Persona '{persona.name}' has 0 linked knowledge sources. Skipping RAG query.")
+                    return ""
+
+            retrieved_chunks = knowledge_base.query(query_text=topic, n_results=3, where=where_filter)
             if retrieved_chunks:
                 knowledge_context = "\n---\n".join(retrieved_chunks)
                 logger.info(f"[Creator] Retrieved {len(retrieved_chunks)} chunks for '{topic}'.")
@@ -109,7 +126,30 @@ class Creator(dspy.Module):
         
         return prediction.tweet_text
 
-    def create_reply(self, target_tweet: str, strategy_insight: str, topic: str):
+    def _format_conversation_history(self, raw_thread: list[dict], active_persona_name: str) -> str:
+        """
+        Sorts the thread chronologically and formats into a readable dialogue script:
+        User: ...
+        Agent (Persona Name): ...
+        """
+        if not raw_thread:
+            return "No prior history in this thread."
+            
+        # Sort chronologically by created_at ISO timestamps
+        sorted_thread = sorted(raw_thread, key=lambda x: x.get("created_at", ""))
+        
+        history_lines = []
+        for tweet in sorted_thread:
+            text = tweet.get("text", "").strip()
+            # Identify if this was sent by our agent (or is flagged as agent)
+            if tweet.get("is_agent", False):
+                history_lines.append(f"{active_persona_name} (Agent): {text}")
+            else:
+                history_lines.append(f"User: {text}")
+                
+        return "\n".join(history_lines)
+
+    def create_reply(self, target_tweet: str, strategy_insight: str, topic: str, conversation_id: Optional[str] = None):
         # 1. Fetch dynamic settings from dedicated AgentPersona database table with JIT fallback
         from ..core.db import get_active_persona
         persona = get_active_persona()
@@ -119,12 +159,27 @@ class Creator(dspy.Module):
         style = persona.tone
         sales_policy = persona.sales_strategy
 
-        # 2. Inject persona identity and sales strategy
+        # 2. Fetch and format thread conversation history
+        from ..services.x_client import x_client
+        conversation_history = "No prior history in this thread."
+        if conversation_id:
+            try:
+                raw_thread = x_client.get_conversation_thread(conversation_id)
+                conversation_history = self._format_conversation_history(raw_thread, persona.name)
+                logger.info(f"[Creator] Fetched and formatted {len(raw_thread)} thread messages.")
+            except Exception as e:
+                logger.error(f"[Creator] Error fetching thread conversation history: {e}")
+
+        # 3. Inject persona identity and sales strategy
         dynamic_strategy = f"Identity: You are '{name}' ({role}).\nSales Policy: {sales_policy}\nFocus: {strategy_insight}"
-        knowledge_context = self._get_knowledge(topic)
+        
+        # Use both topic and target tweet to retrieve highly relevant context
+        retrieval_query = f"{topic} {target_tweet}"
+        knowledge_context = self._get_knowledge(retrieval_query)
         
         prediction = self.reply_generator(
             target_tweet=target_tweet,
+            conversation_history=conversation_history,
             strategy=dynamic_strategy,
             knowledge_context=knowledge_context,
             style=style
@@ -236,7 +291,8 @@ class Brain:
             content = self.creator.create_reply(
                 target_tweet=target_tweet["text"],
                 strategy_insight=analysis["insight"],
-                topic=analysis["topic"]
+                topic=analysis["topic"],
+                conversation_id=target_tweet.get("conversation_id")
             )
             action_type = "reply"
             target_id = target_tweet.get("id", "target_tweet_id")

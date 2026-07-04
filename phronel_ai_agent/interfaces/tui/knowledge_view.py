@@ -21,26 +21,35 @@ class KnowledgeBaseView(Static):
                     yield RichLog(id="kb_chunks_log", highlight=True, wrap=True)
             with Horizontal(id="kb_learn_input_container"):
                 yield Button("+ Learn Material (File/URL)", id="btn_kb_add_modal", variant="success")
+                yield Button("Link/Unlink Active Persona", id="btn_toggle_link", variant="primary")
                 yield Button("Delete Selected", id="btn_delete_source", variant="error")
                 yield Button("Refresh List", id="btn_kb_refresh", variant="default")
 
     def on_mount(self) -> None:
         table = self.query_one("#kb_sources_table", DataTable)
-        table.add_columns("Source Path/URL", "Chunks", "Imported At")
+        table.add_columns("Source Path/URL", "Chunks", "Imported At", "Linked")
         table.cursor_type = "row"
         self.refresh_sources()
 
     def refresh_sources(self) -> None:
+        from ...core.db import get_active_persona, list_linked_sources
         table = self.query_one("#kb_sources_table", DataTable)
         table.clear()
         
+        active_p = get_active_persona()
+        linked_sources = []
+        if active_p and active_p.id:
+            linked_sources = list_linked_sources(active_p.id)
+            
         sources = knowledge_base.list_sources()
         for s in sources:
             imported_str = s["imported_at"].strftime("%Y-%m-%d %H:%M") if isinstance(s["imported_at"], datetime) else str(s["imported_at"])
+            is_linked = "[ ✔ ] Yes" if s["source"] in linked_sources else "[   ] No"
             table.add_row(
                 s["source"],
                 str(s["chunk_count"]),
-                imported_str
+                imported_str,
+                is_linked
             )
             
         # Clean preview if no rows
@@ -88,3 +97,23 @@ class KnowledgeBaseView(Static):
     @on(Button.Pressed, "#btn_kb_add_modal")
     def action_kb_add_modal(self) -> None:
         self.app.push_screen(KnowledgeImportModal())
+
+    @on(Button.Pressed, "#btn_toggle_link")
+    def action_toggle_link(self) -> None:
+        from ...core.db import get_active_persona, toggle_persona_source_link
+        table = self.query_one("#kb_sources_table", DataTable)
+        try:
+            row_key, _ = table.coordinate_to_cell_key(table.cursor_coordinate)
+            source_name = table.get_row(row_key)[0]
+            
+            active_p = get_active_persona()
+            if not active_p or not active_p.id:
+                self.notify("No active persona found.", severity="error")
+                return
+                
+            is_now_linked = toggle_persona_source_link(active_p.id, source_name)
+            status_text = "linked to" if is_now_linked else "unlinked from"
+            self.notify(f"Source '{source_name}' {status_text} active Persona '{active_p.name}'!", severity="information")
+            self.refresh_sources()
+        except Exception as e:
+            self.notify(f"Please select a source row to toggle link. Error: {e}", severity="error")

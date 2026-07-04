@@ -80,7 +80,7 @@ def test_creator_get_knowledge(mock_kb):
         content = creator.create_tweet(strategy_insight="Test Strategy", topic="Test Topic")
         
         assert content == "Generated from Knowledge"
-        mock_kb.query.assert_called_once_with(query_text="Test Topic", n_results=3)
+        mock_kb.query.assert_called_once_with(query_text="Test Topic", n_results=3, where=None)
         
         kwargs = mock_module.call_args[1]
         assert "Mock Knowledge Chunk 1" in kwargs["knowledge_context"]
@@ -156,5 +156,52 @@ def test_creator_dynamic_persona():
             assert "Python Developer Advocate" in kwargs["strategy"]
             assert kwargs["style"] == "Polite and technical"
             assert kwargs["constraints"] == "Max 140 chars"
+
+def test_creator_thread_conversation():
+    from phronel_ai_agent.skills.brain import Creator
+    from phronel_ai_agent.core.models import AgentPersona
+    
+    mock_persona = AgentPersona(
+        name="Ken",
+        role="Tech Rep",
+        tone="Technical",
+        constraints="None",
+        sales_strategy="Answer questions"
+    )
+    
+    # Mock conversation thread response from x_client
+    mock_thread_data = [
+        {"id": "t1", "text": "Is Phronel free?", "author_id": "cust1", "created_at": "2026-06-25T12:00:00Z", "is_agent": False},
+        {"id": "t2", "text": "Yes, it has a free tier!", "author_id": "agent1", "created_at": "2026-06-25T12:05:00Z", "is_agent": True},
+        {"id": "t3", "text": "Where is the link?", "author_id": "cust1", "created_at": "2026-06-25T12:10:00Z", "is_agent": False}
+    ]
+    
+    with patch("phronel_ai_agent.core.db.get_active_persona", return_value=mock_persona):
+        with patch("phronel_ai_agent.services.x_client.XClient.get_conversation_thread") as mock_get_thread:
+            mock_get_thread.return_value = mock_thread_data
+            
+            with patch("phronel_ai_agent.skills.brain.dspy.ChainOfThought") as mock_chain:
+                mock_generator = MagicMock()
+                mock_chain.return_value = mock_generator
+                
+                creator = Creator()
+                # Run create_reply passing a conversation_id
+                creator.create_reply(
+                    target_tweet="Where is the link?",
+                    strategy_insight="Provide trial URL",
+                    topic="free trial",
+                    conversation_id="conv_123"
+                )
+                
+                # Assertions to verify correct interaction with x_client and dspy generator
+                mock_get_thread.assert_called_once_with("conv_123")
+                assert mock_generator.called
+                _, kwargs = mock_generator.call_args
+                
+                # Verify conversation_history was correctly sorted, formatted and passed to DSPy GenerateReply
+                history = kwargs["conversation_history"]
+                assert "User: Is Phronel free?" in history
+                assert "Ken (Agent): Yes, it has a free tier!" in history
+                assert "User: Where is the link?" in history
 
 

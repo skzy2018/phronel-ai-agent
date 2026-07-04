@@ -160,5 +160,73 @@ class XClient:
             # Return dummy metrics for MVP mock mode
             return [{"id": tid, "likes": 5, "retweets": 2, "replies": 1} for tid in tweet_ids]
 
+    def get_conversation_thread(self, conversation_id: str, limit: int = 10):
+        """
+        Gets past tweets in a conversation thread using V2 search API.
+        Returns a list of dicts with tweet info (created_at, author_id, text, is_agent).
+        """
+        self._authenticate()
+        if self.client:
+            try:
+                # Query to fetch all recent tweets with this conversation ID
+                query = f"conversation_id:{conversation_id}"
+                response = self.client.search_recent_tweets(
+                    query=query,
+                    max_results=limit,
+                    tweet_fields=["created_at", "author_id", "conversation_id", "in_reply_to_user_id"]
+                )
+                
+                tweets = []
+                if response.data:
+                    # Get our own user_id if we have it to flag "is_agent"
+                    my_user_id = None
+                    try:
+                        me_response = self.client.get_me()
+                        if me_response and me_response.data:
+                            my_user_id = str(me_response.data.id)
+                    except Exception:
+                        pass
+                        
+                    for tweet in response.data:
+                        tweets.append({
+                            "id": str(tweet.id),
+                            "text": tweet.text,
+                            "author_id": str(tweet.author_id),
+                            "created_at": tweet.created_at.isoformat() if tweet.created_at else "",
+                            "is_agent": str(tweet.author_id) == my_user_id if my_user_id else False
+                        })
+                return tweets
+            except Exception as e:
+                logger.error(f"Error fetching conversation thread {conversation_id}: {e}")
+                return []
+        else:
+            logger.info(f"[MOCK] Getting conversation thread for: {conversation_id}")
+            # Return high-quality, sequential dummy dialog representing a typical sales flow
+            from datetime import datetime, timedelta
+            now = datetime.utcnow()
+            return [
+                {
+                    "id": "mock_tweet_1",
+                    "text": "Phronelっていう自律AI営業ツール、かなり面白そうだけどPython以外でも動くのかな？",
+                    "author_id": "mock_customer_id",
+                    "created_at": (now - timedelta(minutes=10)).isoformat(),
+                    "is_agent": False
+                },
+                {
+                    "id": "mock_tweet_2",
+                    "text": "ご興味をお持ちいただきありがとうございます！現状はPython 3.10以上で開発されておりますが、将来的には他言語やWeb API経由での呼び出しも視野に入れています。",
+                    "author_id": "mock_agent_id",
+                    "created_at": (now - timedelta(minutes=8)).isoformat(),
+                    "is_agent": True
+                },
+                {
+                    "id": "mock_tweet_target",
+                    "text": "いいですね！どこからダウンロードできますか？",
+                    "author_id": "mock_customer_id",
+                    "created_at": (now - timedelta(minutes=5)).isoformat(),
+                    "is_agent": False
+                }
+            ]
+
 # Global instance
 x_client = XClient()

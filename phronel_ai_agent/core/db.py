@@ -79,7 +79,7 @@ def get_active_persona() -> Any:
         # Fallback to default if DB or tables are not initialized
         return AgentPersona()
 
-def save_active_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str) -> Any:
+def save_active_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None) -> Any:
     """Saves or updates the active persona settings in the database."""
     from .models import AgentPersona
     with get_session() as session:
@@ -98,6 +98,7 @@ def save_active_persona(name: str, role: str, tone: str, constraints: str, sales
         persona.tone = tone
         persona.constraints = constraints
         persona.sales_strategy = sales_strategy
+        persona.observe_keyword = observe_keyword
         persona.is_active = True
         
         session.add(persona)
@@ -122,7 +123,7 @@ def list_personas() -> List[Any]:
         # Fallback to default in-memory list if DB/tables are not initialized yet
         return [AgentPersona(id=1, name="Phronel (Default)", is_active=True)]
 
-def add_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str) -> Any:
+def add_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None) -> Any:
     """Adds a new persona to the database."""
     from .models import AgentPersona
     with get_session() as session:
@@ -132,6 +133,7 @@ def add_persona(name: str, role: str, tone: str, constraints: str, sales_strateg
             tone=tone,
             constraints=constraints,
             sales_strategy=sales_strategy,
+            observe_keyword=observe_keyword,
             is_active=False
         )
         session.add(new_p)
@@ -139,7 +141,7 @@ def add_persona(name: str, role: str, tone: str, constraints: str, sales_strateg
         session.refresh(new_p)
         return new_p
 
-def update_persona(persona_id: int, name: str, role: str, tone: str, constraints: str, sales_strategy: str) -> Optional[Any]:
+def update_persona(persona_id: int, name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None) -> Optional[Any]:
     """Updates an existing persona's fields."""
     from .models import AgentPersona
     with get_session() as session:
@@ -150,6 +152,7 @@ def update_persona(persona_id: int, name: str, role: str, tone: str, constraints
             persona.tone = tone
             persona.constraints = constraints
             persona.sales_strategy = sales_strategy
+            persona.observe_keyword = observe_keyword
             session.add(persona)
             session.commit()
             session.refresh(persona)
@@ -189,3 +192,32 @@ def activate_persona(persona_id: int) -> bool:
         session.add(target)
         session.commit()
         return True
+
+def list_linked_sources(persona_id: int) -> List[str]:
+    """Lists all knowledge source names linked to a specific persona."""
+    from .models import PersonaSourceLink
+    try:
+        with get_session() as session:
+            links = session.exec(
+                select(PersonaSourceLink).where(PersonaSourceLink.persona_id == persona_id)
+            ).all()
+            return [l.source for l in links]
+    except Exception:
+        return []
+
+def toggle_persona_source_link(persona_id: int, source: str) -> bool:
+    """Toggles (adds or removes) a link between a persona and a knowledge source. Returns True if linked, False if unlinked."""
+    from .models import PersonaSourceLink
+    with get_session() as session:
+        link = session.get(PersonaSourceLink, (persona_id, source))
+        if link:
+            # Already exists, so remove it (unlink)
+            session.delete(link)
+            session.commit()
+            return False
+        else:
+            # Doesn't exist, so add it (link)
+            new_link = PersonaSourceLink(persona_id=persona_id, source=source)
+            session.add(new_link)
+            session.commit()
+            return True

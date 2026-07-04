@@ -25,8 +25,8 @@ def test_observe_keyword(mock_brain, mock_x_client):
     mock_x_client.search_tweets.assert_called_once_with(query="AI agent", max_results=10)
     mock_brain.process_and_propose.assert_called_once_with(
         [
-            {"id": "1", "text": "I love AI agents!", "author_id": "author_1"},
-            {"id": "2", "text": "How do AI agents work!", "author_id": "author_2"}
+            {"id": "1", "text": "I love AI agents!", "author_id": "author_1", "conversation_id": "mock_conversation_id"},
+            {"id": "2", "text": "How do AI agents work!", "author_id": "author_2", "conversation_id": "mock_conversation_id"}
         ],
         context_summary="Keyword search: AI agent"
     )

@@ -45,4 +45,10 @@ class AgentPersona(SQLModel, table=True):
     tone: str = Field(default="Professional, helpful, slightly witty. Use emoji sparingly.")
     constraints: str = Field(default="Max 280 chars. Direct and engaging.")
     sales_strategy: str = Field(default="Focus on providing value and solving pain points.")
+    observe_keyword: Optional[str] = Field(default=None)  # Comma-separated search keywords for this persona
     is_active: bool = Field(default=True)
+
+class PersonaSourceLink(SQLModel, table=True):
+    """Junction table linking AgentPersona to Knowledge Sources (N:N)."""
+    persona_id: int = Field(foreign_key="agentpersona.id", primary_key=True)
+    source: str = Field(primary_key=True)  # Knowledge Source (file path or URL)

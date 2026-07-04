@@ -305,16 +305,28 @@ class PhronelApp(App):
         self.update_ui_status()
         self.log_view.write("Data refreshed.")
 
+    @on(TabbedContent.TabActivated)
+    def on_tab_activated(self, event: TabbedContent.TabActivated) -> None:
+        """Automatically refreshes data when transitioning between tabs."""
+        self.update_ui_status()
+
     @on(Button.Pressed, "#btn_observe")
     @work(exclusive=True)
     async def run_observe(self) -> None:
-        keyword = config.get("observe_keyword", default="AI エージェント")
+        # Prioritize active persona's specific keywords
+        from ...core.db import get_active_persona
+        active_p = get_active_persona()
+        keyword = active_p.observe_keyword if active_p else None
+        
+        if not keyword:
+            keyword = config.get("observe_keyword", default="AI エージェント")
+            
         self.log_view.write(f"[bold cyan]Running Observe for: {keyword}...[/bold cyan]")
         try:
             action = await asyncio.to_thread(observer.observe_keyword, keyword) # type: ignore
             if action:
                 self.log_view.write(f"[bold green]Proposal generated (ID: {action.id})[/bold green]")
-                await self._handle_auto_execution(action.id)
+                await self._handle_auto_execution(action.id) # type: ignore
             else:
                 self.log_view.write("[yellow]No proposal generated.[/yellow]")
         except Exception as e:
@@ -329,7 +341,7 @@ class PhronelApp(App):
         try:
             action = await asyncio.to_thread(brain.create_tweet_proposal, topic)
             self.log_view.write(f"[bold green]Proposal generated (ID: {action.id})[/bold green]")
-            await self._handle_auto_execution(action.id)
+            await self._handle_auto_execution(action.id) # type: ignore
         except Exception as e:
             self.log_view.write(f"[bold red]Error in Propose: {e}[/bold red]")
         self.update_ui_status()
@@ -372,7 +384,7 @@ class PhronelApp(App):
 
     @on(Button.Pressed, "#btn_approve")
     def action_approve_selected(self) -> None:
-        table = self.query_one("#action_table", DataTable)
+        table = self.query_one("#action_table", DataTable) # type: ignore
         try:
             row_key, _ = table.coordinate_to_cell_key(table.cursor_coordinate)
             action_id = int(table.get_row(row_key)[0])
@@ -385,7 +397,7 @@ class PhronelApp(App):
     @on(Button.Pressed, "#btn_execute")
     @work(exclusive=True)
     async def action_execute_selected(self) -> None:
-        table = self.query_one("#action_table", DataTable)
+        table = self.query_one("#action_table", DataTable) # type: ignore
         try:
             row_key, _ = table.coordinate_to_cell_key(table.cursor_coordinate)
             action_id = int(table.get_row(row_key)[0])
@@ -401,7 +413,7 @@ class PhronelApp(App):
 
     @on(Button.Pressed, "#btn_reject")
     def action_reject_selected(self) -> None:
-        table = self.query_one("#action_table", DataTable)
+        table = self.query_one("#action_table", DataTable) # type: ignore
         try:
             row_key, _ = table.coordinate_to_cell_key(table.cursor_coordinate)
             action_id = int(table.get_row(row_key)[0])
@@ -419,16 +431,23 @@ class PhronelApp(App):
             return
 
         self.log_view.write(f"[dim]Background cycle started ({mode} mode)...[/dim]")
-        keyword = config.get("observe_keyword", default="AI エージェント")
+        
+        # Prioritize active persona's specific keywords
+        from ...core.db import get_active_persona
+        active_p = get_active_persona()
+        keyword = active_p.observe_keyword if active_p else None
+        
+        if not keyword:
+            keyword = config.get("observe_keyword", default="AI エージェント")
         
         try:
-            action = await asyncio.to_thread(observer.observe_keyword, keyword)
+            action = await asyncio.to_thread(observer.observe_keyword, keyword) # type: ignore
             
             if action:
                 self.log_view.write(f"[bold green]Background: New proposal generated (ID: {action.id})[/bold green]")
                 if mode == "auto":
                     self.log_view.write(f"[dim]Auto-mode: Executing action {action.id} immediately...[/dim]")
-                    executed_action = await asyncio.to_thread(execute_action, action.id)
+                    executed_action = await asyncio.to_thread(execute_action, action.id) # type: ignore
                     if executed_action and executed_action.status == "executed":
                         self.log_view.write(f"[bold green]Auto-mode: Action {action.id} executed successfully.[/bold green]")
                     else:

@@ -107,11 +107,12 @@ class KnowledgeBase:
             
         return len(chunks)
 
-    def query(self, query_text: str, n_results: int = 3):
+    def query(self, query_text: str, n_results: int = 3, where: Optional[dict] = None):
         """Queries the knowledge base for relevant chunks."""
         results = self.collection.query(
             query_texts=[query_text],
-            n_results=n_results
+            n_results=n_results,
+            where=where
         )
         # Flatten results
         if results['documents']:

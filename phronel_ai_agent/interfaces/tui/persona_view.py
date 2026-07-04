@@ -39,6 +39,9 @@ class PersonaSettingsView(Static):
                         yield Label("Sales Strategy Guideline (営業戦略・行動規範)", classes="form_label")
                         yield Input(placeholder="e.g. Focus on providing value and solving pain points...", id="input_persona_strategy")
                         
+                        yield Label("Search Keywords - comma separated (検索キーワード - カンマ区切り)", classes="form_label")
+                        yield Input(placeholder="e.g. AI, Python, LLM", id="input_persona_keywords")
+                        
             with Horizontal(id="persona_buttons_container"):
                 yield Button("Save Changes", id="btn_save_persona", variant="success")
                 yield Button("Add New Persona", id="btn_add_persona", variant="primary")
@@ -86,6 +89,7 @@ class PersonaSettingsView(Static):
             self.query_one("#input_persona_tone", Input).value = selected.tone
             self.query_one("#input_persona_constraints", Input).value = selected.constraints
             self.query_one("#input_persona_strategy", Input).value = selected.sales_strategy
+            self.query_one("#input_persona_keywords", Input).value = selected.observe_keyword or ""
             
             # Show active status in header
             status_text = " ★ Active" if selected.is_active else ""
@@ -114,6 +118,7 @@ class PersonaSettingsView(Static):
         tone = self.query_one("#input_persona_tone", Input).value.strip()
         constraints = self.query_one("#input_persona_constraints", Input).value.strip()
         strategy = self.query_one("#input_persona_strategy", Input).value.strip()
+        keywords = self.query_one("#input_persona_keywords", Input).value.strip()
         
         if not name:
             self.notify("Agent Name cannot be empty.", severity="error")
@@ -125,7 +130,8 @@ class PersonaSettingsView(Static):
             role=role,
             tone=tone,
             constraints=constraints,
-            sales_strategy=strategy
+            sales_strategy=strategy,
+            observe_keyword=keywords if keywords else None
         )
         
         self.notify("Selected Persona saved successfully!", severity="information")

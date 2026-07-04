@@ -1,4 +1,5 @@
 import typer
+from typing import Optional
 from pathlib import Path
 from rich.console import Console
 from rich.table import Table
@@ -194,7 +195,7 @@ def propose(topic: str):
     console.print(f"[bold]Content:[/bold] {action.content}")
 
 @app.command()
-def observe(keyword: str, max_results: int = 10):
+def observe(keyword: str, max_results: Optional[int] = None):
     """
     Observe X for a specific keyword, analyze trends, and generate a proposal.
     Usage: phronel observe "AI Agent"
