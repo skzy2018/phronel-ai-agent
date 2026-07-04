@@ -1,6 +1,6 @@
 site_name: Phronel AI Agent - Autonomous SNS Sales Agent
 site_description: Autonomous SNS sales representative AI agent powered by DSPy and local RAG.
-site_url: https://sekizimataisuke.github.io/sns_agent/
+site_url: https://skzy2018.github.io/phronel-ai-agent/
 
 theme:
   name: material
