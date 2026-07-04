@@ -1,9 +1,5 @@
 # 🧠 Phronel AI Agent
 
-<div style="text-align: right;">
-  <strong>Language:</strong> <a href="/">English (EN)</a> | 日本語 (JA)
-</div>
-
 > **DSPyとローカルRAGを搭載した、自律思考型SNS営業担当AIエージェント**
 
 Phronel（ソフィア）は、自律的にタイムラインを観察・分析し、最適な営業戦略を組み立ててX（Twitter）上で高品質な対話を行う、オープンソースの常駐型AIエージェントです。

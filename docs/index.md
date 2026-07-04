@@ -1,9 +1,5 @@
 # 🧠 Phronel AI Agent
 
-<div style="text-align: right;">
-  <strong>Language:</strong> English (EN) | <a href="./index_JA/">日本語 (JA)</a>
-</div>
-
 > **Autonomous AI Agent for SNS Sales and Marketing Powered by DSPy & Local RAG**
 
 Phronel is an open-source, resident AI agent that autonomously monitors and analyzes the timeline, formulates optimized sales strategies, and conducts high-quality interactions on X (Twitter).
