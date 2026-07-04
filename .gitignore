@@ -1,0 +1,18 @@
+trush/
+.venv/
+.venv*/
+__pycache__/
+*.pyc
+chroma_db/
+*.db
+.pytest_cache/
+
+node_modules/
+package-lock.json
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+logs/llm/

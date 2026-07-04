@@ -1,0 +1,62 @@
+site_name: Phronel AI Agent - Autonomous SNS Sales Agent
+site_description: Autonomous SNS sales representative AI agent powered by DSPy and local RAG.
+site_url: https://sekizimataisuke.github.io/sns_agent/
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to Dark Mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to Light Mode
+  features:
+    - navigation.tabs          # Top-level navigation tabs
+    - navigation.sections      # Sidebar sections structure
+    - navigation.expand        # Expand menus automatically
+    - navigation.top           # Back to top button
+    - search.suggest           # Suggest query completions
+    - search.highlight         # Highlight match terms
+
+# Dual Language (EN/JA) Navigation Tree
+nav:
+  - Home: index.md
+  - User Guide: USER_GUIDE.md
+  - Configuration Reference: CONFIG_REFERENCE.md
+  - System Architecture: ARCHITECTURE.md
+  - About Phronel:
+    - Overview & Value Proposal: marketing/knowledge_phronel_intro.md
+    - Product Differentiation: marketing/knowledge_differentiation.md
+    - Technical Architecture: marketing/knowledge_tech_stack.md
+    - Use Cases & Operations: marketing/knowledge_usecases.md
+  - 日本語 (Japanese):
+    - ホーム (JA): index_JA.md
+    - ユーザーガイド (JA): USER_GUIDE_JA.md
+    - 設定リファレンス (JA): CONFIG_REFERENCE_JA.md
+    - システムアーキテクチャ (JA): ARCHITECTURE_JA.md
+    - Phronelについて (JA):
+      - 概要と基本価値提案 (JA): marketing/knowledge_phronel_intro_JA.md
+      - 既存ツールとの違い (JA): marketing/knowledge_differentiation_JA.md
+      - 技術スタック (JA): marketing/knowledge_tech_stack_JA.md
+      - 活用ユースケース (JA): marketing/knowledge_usecases_JA.md
+
+# Markdown Extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - tables
+  - admonition
+  - pymdownx.details
