@@ -14,7 +14,7 @@ Example: `python -m phronel_ai_agent config execution_mode`
 ```bash
 python -m phronel_ai_agent config <KEY> <VALUE>
 ```
-Example: `python -m phronel_ai_agent config observe_keyword "Python Development"`
+Example: `python -m phronel_ai_agent config execution_mode manual`
 
 ---
 
@@ -24,7 +24,6 @@ Example: `python -m phronel_ai_agent config observe_keyword "Python Development"
 | Key | Default Value | Description |
 | :--- | :--- | :--- |
 | `execution_mode` | `manual` | Determines the agent's level of autonomy:<br>- `manual`: Background schedules do not run.<br>- `semi-auto`: Gathers trends and proposes draft posts every 5 minutes; posting requires manual approval in the TUI.<br>- `auto`: 100% autonomous workflow from search to publishing posts.<br>- `dry-run`: Simulation mode. Creates proposals but does not send requests to the actual X API. |
-| `observe_keyword` | `AI エージェント` | The keyword target used by the Observer during timeline searches. |
 
 ### X (Twitter) API Credentials
 API keys registered during the initial setup wizard (`python -m phronel_ai_agent init`).
@@ -50,7 +49,7 @@ Credentials and configurations for the AI's "brain".
 ## 4. Hybrid Environment Variables (.env)
 
 Phronel supports configuration via environment variables (or a local `.env` file). 
-Some run-time configurations, such as `execution_mode` and `observe_keyword`, utilize a **hybrid priority model** where any user-configured TUI/CLI database values override the environmental variables, and variables are only used as fallback defaults.
+Some run-time configurations, such as `execution_mode`, utilize a **hybrid priority model** where any user-configured TUI/CLI database values override the environmental variables, and variables are only used as fallback defaults.
 
 ### Available Variables (PHRONEL_ Prefix)
 

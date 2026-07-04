@@ -14,7 +14,7 @@ python -m phronel_ai_agent config <KEY>
 ```bash
 python -m phronel_ai_agent config <KEY> <VALUE>
 ```
-例: `python -m phronel_ai_agent config observe_keyword "Python 開発"`
+例: `python -m phronel_ai_agent config execution_mode manual`
 
 ---
 
@@ -24,7 +24,6 @@ python -m phronel_ai_agent config <KEY> <VALUE>
 | キー | デフォルト値 | 説明 |
 | :--- | :--- | :--- |
 | `execution_mode` | `manual` | エージェントの自律動作のレベルを決定します。<br>- `manual`: バックグラウンドタスクは実行されません。<br>- `semi-auto`: 5分ごとの定期実行で情報収集と提案（Pending）を行いますが、投稿には手動の承認が必要です。<br>- `auto`: 情報収集からXへの実際の投稿までを全自動で実行します。<br>- `dry-run`: 投稿のシミュレーションのみを行い、X APIにはリクエストを送信しません。 |
-| `observe_keyword` | `AI エージェント` | Xのタイムラインや検索機能（Observe）で、情報収集の対象とするキーワードです。 |
 
 ### X (Twitter) API 認証情報
 初期設定時に `python -m phronel_ai_agent init` で登録されるAPIキー群です。

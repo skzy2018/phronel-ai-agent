@@ -41,9 +41,6 @@ python -m phronel_ai_agent config execution_mode semi-auto
 
 # 全自動モード（提案から投稿まで完全自動で5分ごとに実行）
 python -m phronel_ai_agent config execution_mode auto
-
-# 監視するキーワードの変更
-python -m phronel_ai_agent config observe_keyword "生成AI"
 ```
 
 詳細な設定パラメータについては [CONFIG_REFERENCE.md](./CONFIG_REFERENCE.md) をご参照ください。

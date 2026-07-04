@@ -42,8 +42,6 @@ python -m phronel_ai_agent config execution_mode semi-auto
 # Fully automatic mode (100% autonomous; searches, strategizes, generates, and posts every 5 mins)
 python -m phronel_ai_agent config execution_mode auto
 
-# Changing the search keyword to monitor
-python -m phronel_ai_agent config observe_keyword "Generative AI"
 ```
 
 For more configuration parameters, please refer to [CONFIG_REFERENCE.md](./CONFIG_REFERENCE.md).
