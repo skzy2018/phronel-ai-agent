@@ -1,11 +1,12 @@
 import os
 import dspy
 import logging
+from typing import Optional
 from ..core.db import get_session
 from ..core.models import AgentConfig, StrategyLog, ActionLog
-from ..services.knowledge import knowledge_base
 from ..core.config import config
 from ..core.llm_logger import log_dspy_history
+from ..services.knowledge import knowledge_base
 
 logger = logging.getLogger("phronel")
 
@@ -149,7 +150,7 @@ class Creator(dspy.Module):
                 
         return "\n".join(history_lines)
 
-    def create_reply(self, target_tweet: str, strategy_insight: str, topic: str, conversation_id: Optional[str] = None):
+    def create_reply(self, target_tweet: str, strategy_insight: str, topic: str, conversation_id: Optional[str] = None): 
         # 1. Fetch dynamic settings from dedicated AgentPersona database table with JIT fallback
         from ..core.db import get_active_persona
         persona = get_active_persona()

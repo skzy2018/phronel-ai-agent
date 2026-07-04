@@ -87,7 +87,7 @@ class KnowledgeBase:
         # ChromaDB expects metadatas to be a list of dicts, same length as documents
         metadatas = [{"source": source} for _ in chunks]
 
-        self.collection.add(
+        self.collection.add( # type: ignore
             documents=chunks,
             metadatas=metadatas, # type: ignore
             ids=ids
@@ -109,7 +109,7 @@ class KnowledgeBase:
 
     def query(self, query_text: str, n_results: int = 3, where: Optional[dict] = None):
         """Queries the knowledge base for relevant chunks."""
-        results = self.collection.query(
+        results = self.collection.query( # type: ignore
             query_texts=[query_text],
             n_results=n_results,
             where=where
@@ -128,7 +128,7 @@ class KnowledgeBase:
                 # Query unique sources and count chunks
                 stmt = select(
                     KnowledgeChunk.source,
-                    func.count(KnowledgeChunk.id).label("chunk_count"),
+                    func.count(KnowledgeChunk.id).label("chunk_count"), # type: ignore
                     func.min(KnowledgeChunk.created_at).label("imported_at")
                 ).group_by(KnowledgeChunk.source)
                 results = session.exec(stmt).all()
@@ -149,7 +149,7 @@ class KnowledgeBase:
         try:
             with Session(engine) as session:
                 stmt = select(KnowledgeChunk).where(KnowledgeChunk.source == source_name)
-                return session.exec(stmt).all()
+                return session.exec(stmt).all() # type: ignore
         except Exception as e:
             logger.error(f"[KnowledgeBase] Failed to get chunks for source '{source_name}': {e}")
         return []
@@ -160,17 +160,17 @@ class KnowledgeBase:
         deleted_count = 0
         try:
             # 1. Delete from ChromaDB
-            self.collection.delete(where={"source": source_name})
+            self.collection.delete(where={"source": source_name}) # type: ignore
             logger.info(f"[KnowledgeBase] Deleted source '{source_name}' from ChromaDB.")
             
             # 2. Delete from SQLite
             with Session(engine) as session:
                 # Get the count first for reporting
-                stmt_count = select(func.count(KnowledgeChunk.id)).where(KnowledgeChunk.source == source_name)
+                stmt_count = select(func.count(KnowledgeChunk.id)).where(KnowledgeChunk.source == source_name) # type: ignore
                 deleted_count = session.exec(stmt_count).one()
                 
                 # Delete rows
-                stmt_del = delete(KnowledgeChunk).where(KnowledgeChunk.source == source_name)
+                stmt_del = delete(KnowledgeChunk).where(KnowledgeChunk.source == source_name) # type: ignore
                 session.exec(stmt_del)
                 session.commit()
                 logger.info(f"[KnowledgeBase] Deleted {deleted_count} chunks of source '{source_name}' from SQLite.")

@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from typing import Optional
 
 from textual.app import App, ComposeResult
 from textual.widgets import Header, Footer, RichLog, Button, TabbedContent, TabPane
@@ -19,7 +18,6 @@ from .dashboard_view import AgentStatus
 from .review_view import ActionReview
 from .knowledge_view import KnowledgeBaseView
 from .persona_view import PersonaSettingsView
-from .modals import ActionDetailModal
 
 # --- Custom Logging Handler for TUI ---
 class TuiLogHandler(logging.Handler):

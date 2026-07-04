@@ -65,6 +65,43 @@ class XClient:
             logger.info(f"[MOCK] Posting tweet: {text}")
             return {"id": "mock_id", "text": text}
 
+    def get_tweet(self, tweet_id: str):
+        """Fetches a single tweet by its ID (V2 API)."""
+        self._authenticate()
+        if self.client:
+            try:
+                response = self.client.get_tweet(
+                    id=tweet_id,
+                    tweet_fields=["created_at", "author_id", "conversation_id"]
+                )
+                if response and response.data: # type: ignore
+                    tweet = response.data # type: ignore
+                    return {
+                        "id": str(tweet.id),
+                        "text": tweet.text,
+                        "author_id": str(tweet.author_id),
+                        "conversation_id": str(getattr(tweet, "conversation_id", tweet.id)),
+                        "created_at": tweet.created_at.isoformat() if tweet.created_at else "",
+                        "is_agent": False # Single target user tweet is always a customer/target unless it is our own
+                    }
+                return None
+            except Exception as e:
+                logger.error(f"Error fetching single tweet {tweet_id}: {e}")
+                return None
+        else:
+            logger.info(f"[MOCK] Fetching single tweet: {tweet_id}")
+            # Mock return matching our sequential threads or general target user text
+            from datetime import datetime, timedelta
+            now = datetime.utcnow()
+            return {
+                "id": tweet_id,
+                "text": "Phronelっていう自律AI営業ツール、かなり面白そうだけどPython以外でも動くのかな？",
+                "author_id": "mock_customer_id",
+                "conversation_id": "mock_conversation_id",
+                "created_at": (now - timedelta(minutes=10)).isoformat(),
+                "is_agent": False
+            }
+
     def get_home_timeline(self, max_results=10):
         """Gets home timeline."""
         self._authenticate()
@@ -177,17 +214,17 @@ class XClient:
                 )
                 
                 tweets = []
-                if response.data:
+                if response.data: # type: ignore
                     # Get our own user_id if we have it to flag "is_agent"
                     my_user_id = None
                     try:
                         me_response = self.client.get_me()
-                        if me_response and me_response.data:
-                            my_user_id = str(me_response.data.id)
+                        if me_response and me_response.data: # type: ignore
+                            my_user_id = str(me_response.data.id) # type: ignore
                     except Exception:
                         pass
                         
-                    for tweet in response.data:
+                    for tweet in response.data: # type: ignore
                         tweets.append({
                             "id": str(tweet.id),
                             "text": tweet.text,

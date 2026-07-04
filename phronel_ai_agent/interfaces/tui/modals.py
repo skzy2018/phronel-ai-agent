@@ -47,14 +47,30 @@ class ActionDetailModal(ModalScreen[None]):
     async def load_thread_context(self) -> None:
         from ...services.x_client import x_client
         try:
-            # Dynamically fetch conversation history in background thread to keep UI interactive
-            raw_thread = await asyncio.to_thread(x_client.get_conversation_thread, self.action.target_id)
-            if raw_thread:
+            # 1. Fetch the target root tweet itself to guarantee we show the user's original message
+            target_tweet = await asyncio.to_thread(x_client.get_tweet, self.action.target_id)
+            
+            all_tweets = {}
+            if target_tweet:
+                all_tweets[target_tweet["id"]] = target_tweet
+                conversation_id = target_tweet.get("conversation_id")
+            else:
+                conversation_id = self.action.target_id
+                
+            # 2. Fetch any other tweets in this conversation thread
+            if conversation_id:
+                raw_thread = await asyncio.to_thread(x_client.get_conversation_thread, conversation_id)
+                if raw_thread:
+                    for t in raw_thread:
+                        all_tweets[t["id"]] = t
+            
+            if all_tweets:
                 from ...core.db import get_active_persona
                 active_p = get_active_persona()
                 persona_name = active_p.name if active_p else "Agent"
                 
-                sorted_thread = sorted(raw_thread, key=lambda x: x.get("created_at", ""))
+                # Sort de-duplicated tweets chronologically
+                sorted_thread = sorted(all_tweets.values(), key=lambda x: x.get("created_at", ""))
                 lines = []
                 for t in sorted_thread:
                     text = t.get("text", "").strip()
@@ -136,6 +152,6 @@ class KnowledgeImportModal(ModalScreen[None]):
                 
         # Trigger parent TUI refresh
         try:
-            self.app.query_one("#knowledge_base_view").refresh_sources()
+            self.app.query_one("#knowledge_base_view").refresh_sources() # type: ignore
         except Exception:
             pass
