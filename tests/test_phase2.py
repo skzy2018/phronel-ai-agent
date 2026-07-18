@@ -122,12 +122,26 @@ def test_brain_process_and_propose_reply():
         with patch.object(Strategist, "analyze_timeline", return_value={"topic": "test", "sentiment": "neutral", "action": "reply", "insight": "must reply"}):
             with patch.object(Creator, "create_reply", return_value="Generated Reply"):
                 brain = Brain()
-                action = brain.process_and_propose([{"id": "11223344", "text": "target tweet text", "author_id": "998877"}])
+                action = brain.process_and_propose([{"id": "11223344", "text": "target tweet text", "author_id": "998877"}], is_mention=True)
                 
                 assert action.action_type == "reply"
                 assert action.content == "Generated Reply"
                 assert action.target_id == "11223344"
                 assert action.status == "pending"
+
+def test_brain_process_and_propose_reply_downgrade():
+    with patch("phronel_ai_agent.skills.brain.get_session") as mock_session_getter:
+        mock_session = MagicMock()
+        mock_session_getter.return_value.__enter__.return_value = mock_session
+        
+        with patch.object(Strategist, "analyze_timeline", return_value={"topic": "test", "sentiment": "neutral", "action": "reply", "insight": "must reply"}):
+            brain = Brain()
+            action = brain.process_and_propose([{"id": "11223344", "text": "target tweet text", "author_id": "998877"}])
+            
+            assert action.action_type == "like"
+            assert action.content == "Like tweet"
+            assert action.target_id == "11223344"
+            assert action.status == "pending"
 
 def test_creator_dynamic_persona():
     from phronel_ai_agent.skills.brain import Creator
@@ -203,5 +217,138 @@ def test_creator_thread_conversation():
                 assert "User: Is Phronel free?" in history
                 assert "Ken (Agent): Yes, it has a free tier!" in history
                 assert "User: Where is the link?" in history
+
+def test_persona_tweet_topic():
+    from phronel_ai_agent.core.models import AgentPersona
+    p = AgentPersona(
+        name="Test Persona",
+        tweet_topic="AIによるSNS自動営業の未来"
+    )
+    assert p.name == "Test Persona"
+    assert p.tweet_topic == "AIによるSNS自動営業の未来"
+
+@patch("phronel_ai_agent.skills.brain.has_executed_content")
+def test_creator_anti_duplication_retry(mock_has_executed):
+    from phronel_ai_agent.skills.brain import Creator
+    from phronel_ai_agent.core.models import AgentPersona
+    
+    mock_persona = AgentPersona(
+        name="Ken",
+        role="Advocate",
+        tone="Technical",
+        constraints="Max 140 chars",
+        sales_strategy="Strategy"
+    )
+    
+    # First generated is duplicate, second is unique
+    mock_has_executed.side_effect = lambda text: text == "Duplicate Text"
+    
+    with patch("phronel_ai_agent.core.db.get_active_persona", return_value=mock_persona):
+        with patch("phronel_ai_agent.skills.brain.dspy.ChainOfThought") as mock_chain:
+            mock_generator = MagicMock()
+            
+            mock_res_1 = MagicMock()
+            mock_res_1.tweet_text = "Duplicate Text"
+            
+            mock_res_2 = MagicMock()
+            mock_res_2.tweet_text = "Unique Creative Text"
+            
+            mock_generator.side_effect = [mock_res_1, mock_res_2]
+            mock_chain.return_value = mock_generator
+            
+            creator = Creator()
+            result = creator.create_tweet(strategy_insight="Avoid duplicates", topic="Deduplication")
+            
+            assert result == "Unique Creative Text"
+            assert mock_generator.call_count == 2
+
+def test_executor_executes_follow():
+    from phronel_ai_agent.skills.executor import execute_action
+    from phronel_ai_agent.core.models import ActionLog
+    
+    mock_action = ActionLog(
+        id=12345,
+        action_type="follow",
+        target_id="mock_target_user_id",
+        status="pending",
+        content="Follow back target"
+    )
+    
+    with patch("phronel_ai_agent.skills.executor.get_session") as mock_get_session:
+        mock_session = MagicMock()
+        mock_session.get.return_value = mock_action
+        mock_get_session.return_value.__enter__.return_value = mock_session
+        
+        with patch("phronel_ai_agent.skills.executor.x_client") as mock_x:
+            mock_x.follow_user.return_value = {"following": True}
+            
+            result = execute_action(12345)
+            
+            assert result is not None
+            assert result.status == "executed"
+            mock_x.follow_user.assert_called_once_with("mock_target_user_id")
+
+@patch("phronel_ai_agent.skills.observer.x_client")
+def test_observer_observe_followers(mock_x_client):
+    from phronel_ai_agent.skills.observer import Observer
+    
+    class FakeFollower:
+        def __init__(self, id, name, username):
+            self.id = id
+            self.name = name
+            self.username = username
+            
+    mock_x_client.get_followers.return_value = [
+        FakeFollower(id="user_follower_abc", name="Follower ABC", username="follower_abc")
+    ]
+    
+    with patch("phronel_ai_agent.core.db.get_session") as mock_get_session:
+        mock_session = MagicMock()
+        mock_get_session.return_value.__enter__.return_value = mock_session
+        
+        with patch("phronel_ai_agent.core.db.has_action_for_target", return_value=False):
+            observer = Observer()
+            result = observer.observe_followers()
+            
+            assert result is not None
+            assert result.action_type == "follow"
+            assert result.target_id == "user_follower_abc"
+            
+            assert mock_session.add.called
+            assert mock_session.commit.called
+
+@patch("phronel_ai_agent.core.db.has_action_for_target")
+def test_brain_combo_approach(mock_has_target):
+    from phronel_ai_agent.skills.brain import Brain
+    
+    mock_has_target.return_value = False
+    
+    with patch("phronel_ai_agent.skills.brain.get_session") as mock_get_session:
+        mock_session = MagicMock()
+        mock_get_session.return_value.__enter__.return_value = mock_session
+        
+        with patch("phronel_ai_agent.skills.brain.Brain._ensure_ready"):
+            with patch("phronel_ai_agent.skills.brain.Strategist.analyze_timeline") as mock_analyze:
+                mock_analyze.return_value = {
+                    "action": "like",
+                    "insight": "High relevance product query",
+                    "topic": "product FAQ"
+                }
+                
+                brain_inst = Brain()
+                
+                source_data = [
+                    {"id": "tweet_123", "text": "Is Phronel ready?", "author_id": "cust_author_123"}
+                ]
+                
+                result_action = brain_inst.process_and_propose(source_data, is_mention=False)
+                
+                assert result_action is not None
+                assert result_action.action_type == "like"
+                
+                assert mock_session.add.call_count >= 2
+
+
+
 
 

@@ -3,6 +3,32 @@ from typing import Optional
 from pathlib import Path
 from rich.console import Console
 from rich.table import Table
+import logging
+import os
+import sys
+
+# Setup logging for CLI commands and files
+logger = logging.getLogger("phronel")
+logger.setLevel(logging.DEBUG)
+
+# File Handler for all commands (including background and CLI runs)
+try:
+    os.makedirs("logs", exist_ok=True)
+    file_handler = logging.FileHandler("logs/agent.log", encoding="utf-8")
+    file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s - %(message)s')
+    file_handler.setFormatter(file_formatter)
+    file_handler.setLevel(logging.DEBUG)
+    logger.addHandler(file_handler)
+except Exception:
+    pass
+
+# Console (Stream) Handler - only for CLI commands (excluding TUI 'start')
+if len(sys.argv) > 1 and sys.argv[1] != "start":
+    stream_handler = logging.StreamHandler(sys.stderr)
+    stream_formatter = logging.Formatter('[%(levelname)s] %(message)s')
+    stream_handler.setFormatter(stream_formatter)
+    stream_handler.setLevel(logging.INFO)
+    logger.addHandler(stream_handler)
 
 from .tui import PhronelApp
 from ..core.db import init_db, get_session, get_actions_by_status
@@ -182,13 +208,20 @@ def learn_url(url: str):
         raise typer.Exit(code=1)
 
 @app.command()
-def propose(topic: str):
+def propose(topic: Optional[str] = typer.Argument(None, help="The topic for the tweet proposal. Defaults to active persona's topic.")):
     """
     Generate a tweet proposal based on a topic and save as pending action.
     Usage: phronel propose "New product launch"
     """
     init_db()
-    console.print(f"[cyan]Generating proposal for topic: '{topic}'...[/cyan]")
+    if not topic:
+        from ..core.db import get_active_persona
+        active_p = get_active_persona()
+        topic = getattr(active_p, "tweet_topic", "Latest updates on the Phronel AI Agent") or "Latest updates on the Phronel AI Agent"
+        console.print(f"[cyan]Generating proposal using active persona ({active_p.name}) topic: '{topic}'...[/cyan]")
+    else:
+        console.print(f"[cyan]Generating proposal for topic: '{topic}'...[/cyan]")
+        
     action = brain.create_tweet_proposal(topic)
     console.print(f"[green]✔ Proposal created![/green]")
     console.print(f"[bold]ID:[/bold] {action.id}")
@@ -212,6 +245,25 @@ def observe(keyword: str, max_results: Optional[int] = None):
         console.print("\n[dim]Run 'phronel approve' to review it.[/dim]")
     else:
         console.print(f"[yellow]No actionable insights or proposals generated for '{keyword}'.[/yellow]")
+
+@app.command(name="observe-mentions")
+def observe_mentions_cmd(max_results: Optional[int] = typer.Option(None, help="The maximum number of mentions to fetch.")):
+    """
+    Observe X for mentions of your account, analyze and generate a reply proposal.
+    Usage: phronel observe-mentions
+    """
+    init_db()
+    console.print(f"[cyan]Observing X for account mentions...[/cyan]")
+    action = observer.observe_mentions(max_results)
+    
+    if action:
+        console.print(f"\n[bold green]✔ Analysis Complete and Proposal Created![/bold green]")
+        console.print(f"[bold]Action ID:[/bold] {action.id}")
+        console.print(f"[bold]Proposal Type:[/bold] {action.action_type}")
+        console.print(f"[bold]Content:[/bold]\n{action.content}")
+        console.print("\n[dim]Run 'phronel approve' to review it.[/dim]")
+    else:
+        console.print(f"[yellow]No actionable insights or proposals generated for mentions.[/yellow]")
 
 @app.command()
 def actions(status: str = typer.Argument("pending")):

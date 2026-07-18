@@ -48,6 +48,8 @@ def execute_action(action_id: int):
                 result = x_client.like_tweet(action.target_id) # type: ignore
             elif action.action_type == "reply":
                 result = x_client.reply_to_tweet(action.target_id, action.content) # type: ignore
+            elif action.action_type == "follow":
+                result = x_client.follow_user(action.target_id) # type: ignore
             else:
                 logger.error(f"[Executor] Unknown action type: {action.action_type}")
                 action.status = "failed"

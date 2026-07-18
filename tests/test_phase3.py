@@ -146,3 +146,66 @@ async def test_tui_action_review_modal():
         
         # モーダルが閉じているか検証
         assert not isinstance(app.screen, ActionDetailModal)
+
+@pytest.mark.asyncio
+async def test_tui_action_approve_and_reject():
+    """DataTableの選択された行に対してApprove/Rejectボタンを押したときの挙動をテスト"""
+    app = PhronelApp()
+    async with app.run_test() as pilot:
+        # Action Reviewタブに切り替え
+        tabbed_content = app.query_one(TabbedContent)
+        tabbed_content.active = "tab_review"
+        await pilot.pause()
+        
+        # DataTableを取得
+        table = app.query_one("#action_table", DataTable)
+        assert table is not None
+        
+        # 最初の行にフォーカスを合わせる
+        table.cursor_coordinate = (0, 0)
+        
+        # Approveボタンをプレスする
+        await pilot.click("#btn_approve")
+        await pilot.pause()
+        
+        # ログに「approved」メッセージが出力されていることを確認
+        log_view = app.query_one("#log_view", RichLog)
+        log_content = "".join([strip.text for strip in log_view.lines])
+        assert "approved" in log_content.lower()
+
+        # Rejectボタンをプレスする
+        await pilot.click("#btn_reject")
+        await pilot.pause()
+        
+        # ログに「rejected」メッセージが出力されていることを確認
+        log_content = "".join([strip.text for strip in log_view.lines])
+        assert "rejected" in log_content.lower()
+
+
+@pytest.mark.asyncio
+async def test_tui_observe_interval_seconds_config():
+    """Test that observe_interval_seconds is correctly loaded and validated in the TUI."""
+    from phronel_ai_agent.core.config import config
+    
+    # 1. Test valid interval (e.g., 60 seconds)
+    with patch.object(config, "get", return_value="60"), \
+         patch("phronel_ai_agent.interfaces.tui.app.PhronelApp.set_interval") as mock_set_interval:
+        app = PhronelApp()
+        async with app.run_test() as pilot:
+            mock_set_interval.assert_called_with(60, app.background_agent_check)
+
+    # 2. Test interval below minimum (e.g., 5 seconds should be adjusted to 10)
+    with patch.object(config, "get", return_value="5"), \
+         patch("phronel_ai_agent.interfaces.tui.app.PhronelApp.set_interval") as mock_set_interval:
+        app = PhronelApp()
+        async with app.run_test() as pilot:
+            mock_set_interval.assert_called_with(10, app.background_agent_check)
+
+    # 3. Test invalid interval string (e.g., "invalid", should fallback to 3600)
+    with patch.object(config, "get", return_value="invalid"), \
+         patch("phronel_ai_agent.interfaces.tui.app.PhronelApp.set_interval") as mock_set_interval:
+        app = PhronelApp()
+        async with app.run_test() as pilot:
+            mock_set_interval.assert_called_with(3600, app.background_agent_check)
+
+

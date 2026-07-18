@@ -37,11 +37,24 @@ class ActionDetailModal(ModalScreen[None]):
                 yield Static(self.action.content or "", id="modal_content")
             
             with Horizontal(id="modal_buttons"):
+                yield Button("Copy Content", id="btn_copy", variant="warning")
                 yield Button("Close", id="btn_close", variant="primary")
 
     def on_mount(self) -> None:
         if self.action.action_type in ["reply", "like"] and self.action.target_id:
             self.load_thread_context()
+
+    @on(Button.Pressed, "#btn_copy")
+    def copy_content(self) -> None:
+        """Copies the action's proposed content directly to the system clipboard."""
+        if self.action.content:
+            try:
+                self.app.copy_to_clipboard(self.action.content)
+                self.notify("Content copied to clipboard!", severity="information")
+            except Exception as e:
+                self.notify(f"Failed to copy: {e}", severity="error")
+        else:
+            self.notify("No content to copy.", severity="warning")
 
     @work(exclusive=True)
     async def load_thread_context(self) -> None:

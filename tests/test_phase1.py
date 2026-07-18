@@ -159,3 +159,24 @@ def test_knowledge_source_operations():
     # 5. List again (should be empty)
     sources_after = knowledge_base.list_sources()
     assert len(sources_after) == 0
+
+def test_observe_mentions_command():
+    from unittest.mock import MagicMock, patch
+    
+    mock_action = MagicMock()
+    mock_action.id = 555
+    mock_action.action_type = "reply"
+    mock_action.content = "This is a mock reply"
+    
+    with patch("phronel_ai_agent.interfaces.main.observer") as mock_observer:
+        mock_observer.observe_mentions.return_value = mock_action
+        
+        result = runner.invoke(app, ["observe-mentions", "--max-results", "5"])
+        
+        assert result.exit_code == 0
+        assert "Observing X for account mentions..." in result.stdout
+        assert "✔ Analysis Complete and Proposal Created!" in result.stdout
+        assert "Action ID: 555" in result.stdout
+        assert "This is a mock reply" in result.stdout
+        mock_observer.observe_mentions.assert_called_once_with(5)
+

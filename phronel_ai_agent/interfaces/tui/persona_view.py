@@ -42,6 +42,9 @@ class PersonaSettingsView(Static):
                         yield Label("Search Keywords - comma separated (検索キーワード - カンマ区切り)", classes="form_label")
                         yield Input(placeholder="e.g. AI, Python, LLM", id="input_persona_keywords")
                         
+                        yield Label("Tweet Topic for 'Run Propose' (発信トピック - Run Propose用)", classes="form_label")
+                        yield Input(placeholder="e.g. Latest updates on the Phronel AI Agent", id="input_persona_tweet_topic")
+                        
             with Horizontal(id="persona_buttons_container"):
                 yield Button("Save Changes", id="btn_save_persona", variant="success")
                 yield Button("Add New Persona", id="btn_add_persona", variant="primary")
@@ -90,6 +93,7 @@ class PersonaSettingsView(Static):
             self.query_one("#input_persona_constraints", Input).value = selected.constraints
             self.query_one("#input_persona_strategy", Input).value = selected.sales_strategy
             self.query_one("#input_persona_keywords", Input).value = selected.observe_keyword or ""
+            self.query_one("#input_persona_tweet_topic", Input).value = getattr(selected, "tweet_topic", "Latest updates on the Phronel AI Agent") or "Latest updates on the Phronel AI Agent"
             
             # Show active status in header
             status_text = " ★ Active" if selected.is_active else ""
@@ -119,6 +123,7 @@ class PersonaSettingsView(Static):
         constraints = self.query_one("#input_persona_constraints", Input).value.strip()
         strategy = self.query_one("#input_persona_strategy", Input).value.strip()
         keywords = self.query_one("#input_persona_keywords", Input).value.strip()
+        tweet_topic = self.query_one("#input_persona_tweet_topic", Input).value.strip()
         
         if not name:
             self.notify("Agent Name cannot be empty.", severity="error")
@@ -131,7 +136,8 @@ class PersonaSettingsView(Static):
             tone=tone,
             constraints=constraints,
             sales_strategy=strategy,
-            observe_keyword=keywords if keywords else None
+            observe_keyword=keywords if keywords else None,
+            tweet_topic=tweet_topic if tweet_topic else "Latest updates on the Phronel AI Agent"
         )
         
         self.notify("Selected Persona saved successfully!", severity="information")

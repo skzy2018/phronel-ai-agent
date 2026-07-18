@@ -17,6 +17,17 @@ engine = create_engine(sqlite_url, echo=False)
 def init_db() -> None:
     """Initializes the database by creating all tables defined in models."""
     SQLModel.metadata.create_all(engine)
+    # Check if tweet_topic column exists in agentpersona, if not, add it
+    try:
+        with engine.connect() as conn:
+            cursor = conn.exec_driver_sql("PRAGMA table_info(agentpersona)")
+            columns = [row[1] for row in cursor.fetchall()]
+            if "tweet_topic" not in columns:
+                conn.exec_driver_sql("ALTER TABLE agentpersona ADD COLUMN tweet_topic VARCHAR DEFAULT 'Latest updates on the Phronel AI Agent'")
+                conn.commit()
+    except Exception:
+        # Ignore or log migration helper errors
+        pass
 
 def get_session() -> Session:
     """Returns a new database session."""
@@ -47,6 +58,40 @@ def update_action_status(action_id: int, new_status: str) -> Optional[ActionLog]
             session.refresh(action)
             return action
     return None
+
+def has_action_for_target(target_id: str) -> bool:
+    """Checks if an action (non-failed) already exists for the given target tweet/user ID."""
+    if not isinstance(target_id, str):
+        return False
+    try:
+        import logging
+        db_logger = logging.getLogger("phronel")
+        with get_session() as session:
+            statement = select(ActionLog).where(
+                ActionLog.target_id == target_id,
+                ActionLog.status.in_(["pending", "approved", "executed"])
+            )
+            return session.exec(statement).first() is not None
+    except Exception as e:
+        import logging
+        logging.getLogger("phronel").debug(f"has_action_for_target: DB table might not exist yet: {e}")
+        return False
+
+def has_executed_content(content: str) -> bool:
+    """Checks if the exact content has already been successfully executed/posted to avoid duplicate tweet error."""
+    if not isinstance(content, str):
+        return False
+    try:
+        with get_session() as session:
+            statement = select(ActionLog).where(
+                ActionLog.content == content,
+                ActionLog.status == "executed"
+            )
+            return session.exec(statement).first() is not None
+    except Exception as e:
+        import logging
+        logging.getLogger("phronel").debug(f"has_executed_content: DB table might not exist yet: {e}")
+        return False
 
 def get_active_persona() -> Any:
     """Gets the active persona, creating a default one if none exists in the DB."""
@@ -79,7 +124,7 @@ def get_active_persona() -> Any:
         # Fallback to default if DB or tables are not initialized
         return AgentPersona()
 
-def save_active_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None) -> Any:
+def save_active_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None, tweet_topic: Optional[str] = None) -> Any:
     """Saves or updates the active persona settings in the database."""
     from .models import AgentPersona
     with get_session() as session:
@@ -99,6 +144,7 @@ def save_active_persona(name: str, role: str, tone: str, constraints: str, sales
         persona.constraints = constraints
         persona.sales_strategy = sales_strategy
         persona.observe_keyword = observe_keyword
+        persona.tweet_topic = tweet_topic or "Latest updates on the Phronel AI Agent"
         persona.is_active = True
         
         session.add(persona)
@@ -123,7 +169,7 @@ def list_personas() -> List[Any]:
         # Fallback to default in-memory list if DB/tables are not initialized yet
         return [AgentPersona(id=1, name="Phronel (Default)", is_active=True)]
 
-def add_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None) -> Any:
+def add_persona(name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None, tweet_topic: Optional[str] = None) -> Any:
     """Adds a new persona to the database."""
     from .models import AgentPersona
     with get_session() as session:
@@ -134,6 +180,7 @@ def add_persona(name: str, role: str, tone: str, constraints: str, sales_strateg
             constraints=constraints,
             sales_strategy=sales_strategy,
             observe_keyword=observe_keyword,
+            tweet_topic=tweet_topic or "Latest updates on the Phronel AI Agent",
             is_active=False
         )
         session.add(new_p)
@@ -141,7 +188,7 @@ def add_persona(name: str, role: str, tone: str, constraints: str, sales_strateg
         session.refresh(new_p)
         return new_p
 
-def update_persona(persona_id: int, name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None) -> Optional[Any]:
+def update_persona(persona_id: int, name: str, role: str, tone: str, constraints: str, sales_strategy: str, observe_keyword: Optional[str] = None, tweet_topic: Optional[str] = None) -> Optional[Any]:
     """Updates an existing persona's fields."""
     from .models import AgentPersona
     with get_session() as session:
@@ -153,6 +200,7 @@ def update_persona(persona_id: int, name: str, role: str, tone: str, constraints
             persona.constraints = constraints
             persona.sales_strategy = sales_strategy
             persona.observe_keyword = observe_keyword
+            persona.tweet_topic = tweet_topic or "Latest updates on the Phronel AI Agent"
             session.add(persona)
             session.commit()
             session.refresh(persona)

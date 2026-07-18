@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 from textual.app import App, ComposeResult
-from textual.widgets import Header, Footer, RichLog, Button, TabbedContent, TabPane
+from textual.widgets import Header, Footer, RichLog, Button, TabbedContent, TabPane, DataTable
 from textual.containers import Horizontal, ScrollableContainer
 from textual import work, on
 from textual.binding import Binding
@@ -24,11 +24,15 @@ class TuiLogHandler(logging.Handler):
     def __init__(self, log_widget: RichLog):
         super().__init__()
         self.log_widget = log_widget
+        self.history = []
 
     def emit(self, record):
         try:
             log_entry = self.format(record)
             self.log_widget.write(log_entry)
+            self.history.append(log_entry)
+            if len(self.history) > 1000:
+                self.history.pop(0)
         except Exception:
             # Prevent throwing NoActiveAppError or other issues when running tests
             # or when the logger is triggered outside an active Textual application
@@ -241,6 +245,7 @@ class PhronelApp(App):
         Binding("q", "quit", "Quit", show=True),
         Binding("r", "refresh", "Refresh Data", show=True),
         Binding("s", "start_agent", "Run Agent Cycle", show=True),
+        Binding("c", "copy_logs", "Copy Logs", show=True),
     ]
 
     def compose(self) -> ComposeResult:
@@ -276,8 +281,18 @@ class PhronelApp(App):
         self.log_view.write("[bold yellow]Phronel AI Agent TUI Started.[/bold yellow]")
         self.update_ui_status()
         
-        # Start background check interval (every 5 minutes for auto-mode)
-        self.set_interval(300, self.background_agent_check)
+        # Start background check interval (configurable, defaults to 1 hour)
+        interval_str = config.get("observe_interval_seconds", default="3600")
+        try:
+            interval = int(interval_str)
+            if interval < 10:
+                logger.warning(f"Observe interval ({interval}s) is too short. Resetting to 10s minimum for stability.")
+                interval = 10
+        except ValueError:
+            logger.warning(f"Invalid observe_interval_seconds configuration value '{interval_str}'. Falling back to 3600s.")
+            interval = 3600
+
+        self.set_interval(interval, self.background_agent_check)
 
     def update_ui_status(self) -> None:
         """Updates the status display and action review table."""
@@ -317,7 +332,7 @@ class PhronelApp(App):
         keyword = active_p.observe_keyword if active_p else None
         
         if not keyword:
-            keyword = config.get("observe_keyword", default="AI エージェント")
+            keyword = config.get("observe_keyword", default="AI Agent")
             
         self.log_view.write(f"[bold cyan]Running Observe for: {keyword}...[/bold cyan]")
         try:
@@ -334,8 +349,11 @@ class PhronelApp(App):
     @on(Button.Pressed, "#btn_propose")
     @work(exclusive=True)
     async def run_propose(self) -> None:
-        topic = "Phronel AIエージェントの近況について"
-        self.log_view.write(f"[bold cyan]Running Propose for: {topic}...[/bold cyan]")
+        from ...core.db import get_active_persona
+        active_p = get_active_persona()
+        topic = getattr(active_p, "tweet_topic", "Latest updates on the Phronel AI Agent") or "Latest updates on the Phronel AI Agent"
+        
+        self.log_view.write(f"[bold cyan]Running Propose for active persona ({active_p.name}) with topic: {topic}...[/bold cyan]")
         try:
             action = await asyncio.to_thread(brain.create_tweet_proposal, topic)
             self.log_view.write(f"[bold green]Proposal generated (ID: {action.id})[/bold green]")
@@ -436,7 +454,7 @@ class PhronelApp(App):
         keyword = active_p.observe_keyword if active_p else None
         
         if not keyword:
-            keyword = config.get("observe_keyword", default="AI エージェント")
+            keyword = config.get("observe_keyword", default="AI Agent")
         
         try:
             action = await asyncio.to_thread(observer.observe_keyword, keyword) # type: ignore
@@ -463,6 +481,25 @@ class PhronelApp(App):
     def action_start_agent(self) -> None:
         """Manual trigger for one cycle."""
         self.run_observe()
+
+    def action_copy_logs(self) -> None:
+        """Copies all session dashboard logs (stripped of markup) to the system clipboard."""
+        if hasattr(self, "handler") and self.handler.history:
+            import re
+            clean_lines = []
+            for line in self.handler.history:
+                # Remove Textual/Rich markup tags like [bold red] for clean text copy
+                clean_line = re.sub(r"\[/?(?:bold|dim|italic|underline|reverse|strike|blink|[^\]]+)\]", "", line)
+                clean_lines.append(clean_line)
+            
+            log_text = "\n".join(clean_lines)
+            try:
+                self.copy_to_clipboard(log_text)
+                self.notify("Dashboard logs copied to clipboard!", severity="information")
+            except Exception as e:
+                self.notify(f"Failed to copy logs: {e}", severity="error")
+        else:
+            self.notify("No logs to copy yet.", severity="warning")
 
 if __name__ == "__main__":
     app = PhronelApp()

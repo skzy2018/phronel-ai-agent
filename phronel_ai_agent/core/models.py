@@ -46,6 +46,7 @@ class AgentPersona(SQLModel, table=True):
     constraints: str = Field(default="Max 280 chars. Direct and engaging.")
     sales_strategy: str = Field(default="Focus on providing value and solving pain points.")
     observe_keyword: Optional[str] = Field(default=None)  # Comma-separated search keywords for this persona
+    tweet_topic: str = Field(default="Latest updates on the Phronel AI Agent")  # Default topic for single tweet proposals
     is_active: bool = Field(default=True)
 
 class PersonaSourceLink(SQLModel, table=True):

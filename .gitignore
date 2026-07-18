@@ -16,4 +16,4 @@ package-lock.json
 .env.*
 !.env.example
 
-logs/llm/
+logs/
