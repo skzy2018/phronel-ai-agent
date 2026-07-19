@@ -1,0 +1,2085 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Autonomous SNS sales representative AI agent powered by DSPy and local RAG.">
+      
+      
+      
+        <link rel="canonical" href="https://skzy2018.github.io/phronel-ai-agent/ARCHITECTURE_JA/">
+      
+      
+        <link rel="prev" href="../CONFIG_REFERENCE_JA/">
+      
+      
+        <link rel="next" href="../marketing/knowledge_phronel_intro_JA/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>システムアーキテクチャ (JA) - Phronel AI Agent - Autonomous SNS Sales Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phronel-ai-agent-system-architecture-code-map" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Phronel AI Agent - Autonomous SNS Sales Agent" class="md-header__button md-logo" aria-label="Phronel AI Agent - Autonomous SNS Sales Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Phronel AI Agent - Autonomous SNS Sales Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              システムアーキテクチャ (JA)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to Dark Mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to Dark Mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to Light Mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to Light Mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../USER_GUIDE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  User Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CONFIG_REFERENCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Configuration Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../ARCHITECTURE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  System Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../marketing/knowledge_phronel_intro/" class="md-tabs__link">
+          
+  
+  
+  About Phronel
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../index_JA/" class="md-tabs__link">
+          
+  
+  
+  日本語 (Japanese)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Phronel AI Agent - Autonomous SNS Sales Agent" class="md-nav__button md-logo" aria-label="Phronel AI Agent - Autonomous SNS Sales Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Phronel AI Agent - Autonomous SNS Sales Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../USER_GUIDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONFIG_REFERENCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Phronel
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About Phronel
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_phronel_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Value Proposal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_differentiation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Differentiation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_tech_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_usecases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use Cases & Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    日本語 (Japanese)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    日本語 (Japanese)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../USER_GUIDE_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ユーザーガイド (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONFIG_REFERENCE_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設定リファレンス (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    システムアーキテクチャ (JA)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    システムアーキテクチャ (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. ディレクトリ構成 (Directory Structure)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-data-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. データモデル定義 (Data Models)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. データモデル定義 (Data Models)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-agentconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. AgentConfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-knowledgechunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. KnowledgeChunk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-actionlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. ActionLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-strategylog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. StrategyLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-agentpersona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. AgentPersona
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-function-method-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 関数・クラスマップ (Function &amp; Method Map)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-feature-function-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 各機能の関数の位置付け・ライフサイクル (Feature-Function Mapping)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 各機能の関数の位置付け・ライフサイクル (Feature-Function Mapping)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-1x-credentials-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. 機能1：Xアカウントの連携設定と認証 (Credentials &amp; Initialization)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-2-rag-knowledge-ingestion-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. 機能2：知識取り込みと RAG 連携 (Knowledge Ingestion &amp; RAG)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-3x-trend-observation-proposal-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. 機能3：X上のトレンド観測・自律的営業活動提案 (Trend Observation &amp; Proposal Pipeline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-4-approval-flow-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. 機能4：承認フローとアクション実行 (Approval Flow &amp; Execution)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-5-reporting-optimization-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5. 機能5：分析報告とプロンプト自動最適化 (Reporting &amp; Optimization Cycle)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phronelについて (JA)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phronelについて (JA)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_phronel_intro_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要と基本価値提案 (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_differentiation_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    既存ツールとの違い (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_tech_stack_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    技術スタック (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_usecases_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    活用ユースケース (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. ディレクトリ構成 (Directory Structure)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-data-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. データモデル定義 (Data Models)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. データモデル定義 (Data Models)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-agentconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. AgentConfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-knowledgechunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. KnowledgeChunk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-actionlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. ActionLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-strategylog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. StrategyLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-agentpersona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. AgentPersona
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-function-method-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 関数・クラスマップ (Function &amp; Method Map)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-feature-function-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 各機能の関数の位置付け・ライフサイクル (Feature-Function Mapping)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. 各機能の関数の位置付け・ライフサイクル (Feature-Function Mapping)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-1x-credentials-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. 機能1：Xアカウントの連携設定と認証 (Credentials &amp; Initialization)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-2-rag-knowledge-ingestion-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. 機能2：知識取り込みと RAG 連携 (Knowledge Ingestion &amp; RAG)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-3x-trend-observation-proposal-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. 機能3：X上のトレンド観測・自律的営業活動提案 (Trend Observation &amp; Proposal Pipeline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-4-approval-flow-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. 機能4：承認フローとアクション実行 (Approval Flow &amp; Execution)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-5-reporting-optimization-cycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5. 機能5：分析報告とプロンプト自動最適化 (Reporting &amp; Optimization Cycle)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="phronel-ai-agent-system-architecture-code-map">Phronel AI Agent - System Architecture &amp; Code Map</h1>
+<p>本ドキュメントは、「SNS営業窓口 AIエージェント」である <strong>Phronel (ソフィア)</strong> のシステム構成、データモデル、主要関数、および各機能との関連性を体系的に説明するための開発者ガイドです。</p>
+<hr />
+<h2 id="1-directory-structure">1. ディレクトリ構成 (Directory Structure)</h2>
+<p>本プロジェクトは、責務ごとに明確に分離されたレイヤー化アーキテクチャ（4層構造）を採用しています。これにより、各モジュールが疎結合になり、テストや将来の拡張が容易になっています。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sns_agent/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── .gitignore                   # 環境設定（.env）等のGit除外
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── .env.example                 # 環境変数設定のテンプレート
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── .env                         # ローカルの秘密APIキーや基本パスの設定
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── README.md                    # プロジェクト全体の導入ガイド
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── requirements.txt             # 依存ライブラリの定義
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── docs/                        # エンドユーザー/管理者向け各種マニュアル
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── USER_GUIDE.md            # 初期設定・使用方法
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── ARCHITECTURE.md          # [本書] システムアーキテクチャー / コードマップ
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   └── CONFIG_REFERENCE.md      # 各種パラメータの解説
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>├── tests/                       # 各種ユニットテスト
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── conftest.py              # テスト環境の完全クリーン隔離機構
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── test_db.py               # データベース操作のテスト
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── test_metrics.py          # 評価メトリクスのテスト
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── test_observer.py         # 観察ロジックのテスト
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   └── test_phase1~4.py         # フェーズごとの結合・機能テスト
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>└── phronel_ai_agent/             # アプリケーションソースコード
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    ├── __init__.py              # パッケージ初期化
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    ├── __main__.py              # コマンドライン実行エントリーポイント
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    ├── core/                    # [Core層] データベース定義、設定、定数管理
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    │   ├── db.py                # SQLite接続とDB/リポジトリ関数
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>    │   ├── config.py            # アプリケーション設定管理 (ConfigManager)
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>    │   └── models.py            # SQLModelによるデータモデル定義
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    ├── interfaces/              # [Presentation層] ユーザーインターフェース (CLI/TUI)
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    │   ├── main.py              # CLI (Typer) コマンドの定義
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    │   └── tui/                 # [TUIパッケージ / モジュール分割完了!]
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    │       ├── __init__.py      # パッケージエントリーポイント
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    │       ├── app.py           # メインApp (PhronelApp) &amp; リアルタイムログ
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    │       ├── modals.py        # 各モーダル画面 (Action詳細, 知識追加モーダル)
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    │       ├── dashboard_view.py# ステータス要約ビュー
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    │       ├── review_view.py   # 投稿承認フロービュー
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    │       ├── knowledge_view.py# RAGドメイン知識管理ビュー (プレビュー＆削除)
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    │       └── persona_view.py  # マルチペルソナ設定管理ビュー
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    ├── services/                # [Infrastructure層] 外部サービス、DBクライアント
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    │   ├── x_client.py          # X API (Tweepy) クライアント (Online/Mock対応)
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    │   └── knowledge.py         # ChromaDBベクトルストア連携 (RAGナレッジ / URLインテリジェントパーサー)
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    └── skills/                  # [Domain/Skill層] 自律AIロジック
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        ├── brain.py             # 思考コア (DSPy Strategist &amp; Creator / 動的ペルソナ結合)
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>        ├── observer.py          # 情報収集 (特定キーワード・トレンド監視 / 実ツイートID伝播)
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        ├── executor.py          # アクション実行 (投稿、リプライ、いいね、ドライラン対応)
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        ├── analyst.py           # 分析・最適化 (日次レポーティング / DB動的Example逆引きFew-Shot)
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>        └── metrics.py           # [評価層 / 新規追加!] 多層スコアリング・コサイン類似度メトリクス
+</code></pre></div>
+<hr />
+<h2 id="2-data-models">2. データモデル定義 (Data Models)</h2>
+<p>データモデルは <code>phronel_ai_agent/core/models.py</code> で <code>SQLModel</code> を用いて定義されており、ローカルの SQLite データベース (<code>phronel_agent.db</code>) に保存されます。</p>
+<h3 id="21-agentconfig">2.1. AgentConfig</h3>
+<p>エージェントの各種設定（APIキー、実行モード、ターゲットキーワードなど）をKey-Value形式で永続化します。
+*   <strong><code>key</code> (str, 主キー)</strong>: 設定項目名 (例: <code>gemini_api_key</code>, <code>execution_mode</code>)
+*   <strong><code>value</code> (str)</strong>: 設定値
+*   <strong><code>description</code> (Optional[str])</strong>: 設定項目の説明
+*   <strong><code>updated_at</code> (datetime)</strong>: 最終更新日時 (デフォルト: UTC現在時刻)</p>
+<h3 id="22-knowledgechunk">2.2. KnowledgeChunk</h3>
+<p>RAG (Retrieval-Augmented Generation) に用いるドキュメントやWebURL素材を、チャンク（分割テキスト）単位でSQLite側に参照用として保存します。
+*   <strong><code>id</code> (Optional[int], 主キー)</strong>: 自動採番
+*   <strong><code>content</code> (str)</strong>: 分割されたテキスト本文
+*   <strong><code>source</code> (str)</strong>: 元ファイルのパスまたはソースURL
+*   <strong><code>embedding_id</code> (Optional[str])</strong>: ベクトルデータベース (ChromaDB) 内の対応ベクトルID
+*   <strong><code>created_at</code> (datetime)</strong>: 取り込み日時</p>
+<h3 id="23-actionlog">2.3. ActionLog</h3>
+<p>AIが提案した、または人間が承認して実行したすべてのSNS上のアクション（つぶやき、返信、いいね等）のステータスと履歴を追跡します。
+*   <strong><code>id</code> (Optional[int], 主キー)</strong>: 自動採番
+*   <strong><code>action_type</code> (str)</strong>: <code>'tweet'</code>, <code>'reply'</code>, <code>'like'</code>, <code>'follow'</code> のいずれか
+*   <strong><code>content</code> (Optional[str])</strong>: 投稿・リプライの本文
+*   <strong><code>target_id</code> (Optional[str])</strong>: 反応対象のツイートIDまたはユーザーID
+*   <strong><code>status</code> (str)</strong>: ステータス (<code>pending</code>, <code>approved</code>, <code>executed</code>, <code>failed</code>)
+*   <strong><code>result_json</code> (Optional[str])</strong>: 実行完了時にX APIから返却されたレスポンスのJSON文字列
+*   <strong><code>strategy_log_id</code> (Optional[int], 外部キー)</strong>: 本アクションを意思決定させた戦略思考ログ <code>StrategyLog</code> の主キーID（1対1リレーション）
+*   <strong><code>created_at</code> (datetime)</strong>: 提案生成日時
+*   <strong><code>executed_at</code> (Optional[datetime])</strong>: アクションの実行完了日時</p>
+<h3 id="24-strategylog">2.4. StrategyLog</h3>
+<p>AIが状況を観察し、どのような分析に基づいて上記アクションを決定したかという「思考・戦略プロセス」を記録し、インサイト報告のソースとします。
+*   <strong><code>id</code> (Optional[int], 主キー)</strong>: 自動採番
+*   <strong><code>context_summary</code> (str)</strong>: 状況の要約 (例: "Timeline analysis")
+*   <strong><code>strategy_text</code> (str)</strong>: AIが考えた戦略・判断の根拠 (CoT出力)
+*   <strong><code>model_name</code> (str)</strong>: 推論に使用したLLMモデル名 (例: <code>gemini-2.5-flash</code>)
+*   <strong><code>created_at</code> (datetime)</strong>: ログ作成日時</p>
+<h3 id="25-agentpersona">2.5. AgentPersona</h3>
+<p>LLMによって実行するときのペルソナ情報と営業指針を格納するテーブルです。複数登録でき、activeな情報で実行されます。
+*   <strong><code>id</code> (Optional[int], 主キー)</strong>: 自動採番
+*   <strong><code>name</code> (str)</strong>: ペルソナの名前 / デフォルト: "Phronel"
+*   <strong><code>role</code> (str)</strong>: ペルソナの役割・専門性 / デフォルト: "SNS Sales Representative..."
+*   <strong><code>tone</code> (str)</strong>: ペルソナの口調・トーン / デフォルト: "Professional, polite, helpful..."
+*   <strong><code>constraints</code> (str)</strong>: 信時の絶対禁止ルール / デフォルト: "Max 280 chars..."
+*   <strong><code>sales_strategy</code> (str)</strong>: 営業戦略方針 / デフォルト: "Focus on providing value and solving pain points..."
+*   <strong><code>is_active</code> (bool)</strong>: アクティブかどうか (データのどれか一つがtrue)</p>
+<hr />
+<h2 id="3-function-method-map">3. 関数・クラスマップ (Function &amp; Method Map)</h2>
+<p>各レイヤーに含まれるクラスおよび関数のシグネチャ、動作概要を網羅した詳細マップです。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">レイヤー</th>
+<th style="text-align: left;">モジュール・ファイル</th>
+<th style="text-align: left;">クラス/関数</th>
+<th style="text-align: left;">引数と戻り値</th>
+<th style="text-align: left;">動作内容の説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Core</strong></td>
+<td style="text-align: left;"><code>core/db.py</code></td>
+<td style="text-align: left;"><code>init_db</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">SQLite DBのテーブルを初期化（SQLModelベース）</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_session</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>Session</code></td>
+<td style="text-align: left;">新しいデータベースセッションを生成して返却</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_actions_by_status</code></td>
+<td style="text-align: left;"><code>(statuses: List[str])</code> -&gt; <code>List[ActionLog]</code></td>
+<td style="text-align: left;">指定されたステータスに一致するアクション一覧を逆順で取得</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_pending_action_count</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>int</code></td>
+<td style="text-align: left;"><code>pending</code> (保留中) 状態のアクション総数をカウントして返却</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>update_action_status</code></td>
+<td style="text-align: left;"><code>(action_id: int, new_status: str)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">指定IDのアクションステータスを更新・永続化する</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_active_persona</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">現在アクティブなペルソナ情報を取得。未設定時はデフォルトをJIT自動生成。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>save_active_persona</code></td>
+<td style="text-align: left;"><code>(name, role, tone, constraints, strategy)</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">アクティブペルソナ情報を一括保存・作成する。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>list_personas</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>List[AgentPersona]</code></td>
+<td style="text-align: left;">登録されているすべてのペルソナ情報を取得。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>add_persona</code></td>
+<td style="text-align: left;"><code>(name, role, tone, constraints, strategy)</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">新しいペルソナレコードを追加。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>update_persona</code></td>
+<td style="text-align: left;"><code>(id, name, role, tone, constraints, strategy)</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">指定IDのペルソナ情報を更新。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>delete_persona</code></td>
+<td style="text-align: left;"><code>(id)</code> -&gt; <code>bool</code></td>
+<td style="text-align: left;">指定IDのペルソナを消去（アクティブ行はエラーガードで削除不可）。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>activate_persona</code></td>
+<td style="text-align: left;"><code>(id)</code> -&gt; <code>bool</code></td>
+<td style="text-align: left;">指定IDのペルソナをアクティブ化し、他をすべて非アクティブ化。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>core/config.py</code></td>
+<td style="text-align: left;"><code>ConfigManager.get</code></td>
+<td style="text-align: left;"><code>(key: str, default: Optional[str])</code> -&gt; <code>Optional[str]</code></td>
+<td style="text-align: left;">指定された設定値をDBから取得。環境変数 <code>PHRONEL_&lt;KEY&gt;</code> をフォールバックとして優先順位判定を行う。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>ConfigManager.set</code></td>
+<td style="text-align: left;"><code>(key: str, value: str, description: Optional[str])</code> -&gt; <code>AgentConfig</code></td>
+<td style="text-align: left;">指定のキー設定値をDBに保存・更新する</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Services</strong></td>
+<td style="text-align: left;"><code>services/knowledge.py</code></td>
+<td style="text-align: left;"><code>KnowledgeBase.__init__</code></td>
+<td style="text-align: left;"><code>(persist_directory: Optional[str])</code></td>
+<td style="text-align: left;">ChromaDBのクライアントおよびスプリッターを遅延初期化（オンデマンド結合）用に準備。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.add_document</code></td>
+<td style="text-align: left;"><code>(content: str, source: str)</code> -&gt; <code>int</code></td>
+<td style="text-align: left;">テキストをチャンク分割し、ChromaDBとSQLite（KnowledgeChunk）の両方に保存</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.add_url</code></td>
+<td style="text-align: left;"><code>(url: str)</code> -&gt; <code>int</code></td>
+<td style="text-align: left;">指定されたWeb URLからHTMLを自動取得し、不要タグを除去してプレーンテキストとして学習・保存。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.list_sources</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>List[Dict[str, Any]]</code></td>
+<td style="text-align: left;">取り込み済みのナレッジソース、チャンク総数、取り込み時間をSQLiteからクエリ。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.get_chunks_by_source</code></td>
+<td style="text-align: left;"><code>(source: str)</code> -&gt; <code>List[KnowledgeChunk]</code></td>
+<td style="text-align: left;">特定のソースに紐づく実際の全テキストチャンクを取得。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.delete_source</code></td>
+<td style="text-align: left;"><code>(source: str)</code> -&gt; <code>int</code></td>
+<td style="text-align: left;">指定されたソースおよび関連する全ベクトル・テキストチャンクをChromaDBとSQLiteから同期完全削除。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.query</code></td>
+<td style="text-align: left;"><code>(query_text: str, n_results: int)</code> -&gt; <code>List[str]</code></td>
+<td style="text-align: left;">クエリ文に類似するチャンクをChromaDBからRAGコンテキストとして取得</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>services/x_client.py</code></td>
+<td style="text-align: left;"><code>XClient.__init__</code></td>
+<td style="text-align: left;"><code>()</code></td>
+<td style="text-align: left;">認証用内部変数 and 認証フラグの初期化</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient._authenticate</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;"><code>ConfigManager</code> から認証情報を取得し Tweepy API (V2 &amp; V1.1) を初期化。情報が足りない場合はMockモードで動作</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.post_tweet</code></td>
+<td style="text-align: left;"><code>(text: str)</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">X APIでツイートを投稿する（Mock時は標準出力）</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.like_tweet</code></td>
+<td style="text-align: left;"><code>(tweet_id: str)</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">指定されたツイートを「いいね」する</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.reply_to_tweet</code></td>
+<td style="text-align: left;"><code>(tweet_id: str, text: str)</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">指定されたツイートに対してリプライを投稿する</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.search_tweets</code></td>
+<td style="text-align: left;"><code>(query: str, max_results: int)</code> -&gt; <code>Any</code></td>
+<td style="text-align: left;">関連キーワードで最新のツイート群を検索・取得</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.get_tweet_metrics</code></td>
+<td style="text-align: left;"><code>(tweet_ids: List[str])</code> -&gt; <code>List[dict]</code></td>
+<td style="text-align: left;">投稿済みツイート群の「いいね数」「リツイート数」などの統計データを一括取得</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Skills</strong></td>
+<td style="text-align: left;"><code>skills/brain.py</code></td>
+<td style="text-align: left;"><code>Strategist.analyze_timeline</code></td>
+<td style="text-align: left;"><code>(tweets: List[str])</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">収集したツイート群をDSPy CoT (<code>AnalyzeTrend</code> Signature) で分析し戦略を策定</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Creator._get_knowledge</code></td>
+<td style="text-align: left;"><code>(topic: str)</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">トピックに関連するチャンクを知識ベースから引き出し、1つのRAG用文脈テキストにまとめる</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Creator.create_tweet</code></td>
+<td style="text-align: left;"><code>(strategy_insight: str, topic: str)</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">DBから動的取得したアクティブな名前・役割・トーン・制約・営業指針をインジェクションして、投稿用つぶやきを生成。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Creator.create_reply</code></td>
+<td style="text-align: left;"><code>(target_tweet: str, strategy_insight: str, topic: str)</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">対象ツイートに対するリプライ文を、DBから動的取得したペルソナ情報を注入して生成。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain.__init__</code></td>
+<td style="text-align: left;"><code>()</code></td>
+<td style="text-align: left;">メンバー変数を初期化。LLM構成や Few-Shot プロンプトファイルのロード処理は遅延（オンデマンド）で実行。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain._ensure_ready</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">初めて推論やAPIが呼ばれたタイミング（JIT）で、Gemini LLM 構成と Few-Shot プロンプトのディスク読込を実行。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain.process_and_propose</code></td>
+<td style="text-align: left;"><code>(source_data: list, context_summary: str)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">観察データ（辞書オブジェクト/文字列）から、分析 ➔ 動的ペルソナ流し込み生成 ➔ アクション提案。StrategyLogとActionLogを外部キーで強固に紐付けて保存。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain.create_tweet_proposal</code></td>
+<td style="text-align: left;"><code>(topic: str)</code> -&gt; <code>ActionLog</code></td>
+<td style="text-align: left;">特定のトピックをベースに、RAGを用いて新しい投稿案を作成し、<code>pending</code> 状態で保存</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/observer.py</code></td>
+<td style="text-align: left;"><code>Observer.observe_keyword</code></td>
+<td style="text-align: left;"><code>(keyword: str, max_results: int)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">Xを特定キーワードで検索、取得した実ツイート情報（ID、ユーザーID等）をメタデータとして保持したまま <code>Brain.process_and_propose</code> に流して自律的アクションを提案する</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/executor.py</code></td>
+<td style="text-align: left;"><code>execute_action</code></td>
+<td style="text-align: left;"><code>(action_id: int)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">指定されたアクションを実行。<code>execution_mode</code> が <code>dry-run</code> ならAPIを叩かず擬似ログを出力。成功/失敗のログを保存</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>approve_action</code></td>
+<td style="text-align: left;"><code>(action_id: int)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">指定のアクションを <code>pending</code> から <code>approved</code> (承認済み) に変更</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/analyst.py</code></td>
+<td style="text-align: left;"><code>Analyst.generate_daily_report</code></td>
+<td style="text-align: left;"><code>(target_date: Optional[datetime])</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">その日に実行されたアクション、策定された戦略、Xから取得したインサイト統計情報を集計し、DSPyで日次報告書を生成</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Analyst.optimize_creator_prompts</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>bool</code></td>
+<td style="text-align: left;">SQLite の ActionLog/StrategyLog の実績リレーション行から実際の成功事例（Example）を動的マイニング抽出して、DSPy <code>BootstrapFewShot</code> を用いて最適 Few-Shot プロンプトを作成・保存。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/metrics.py</code></td>
+<td style="text-align: left;"><code>phronel_multi_tier_metric</code></td>
+<td style="text-align: left;"><code>(example, pred, trace)</code> -&gt; <code>float</code></td>
+<td style="text-align: left;"><strong>[評価層]</strong> ハードガードレール（文字数280、空文字、ハルシネーション検出）、美的・運用制約（ハッシュタグ数、絵文字数）、およびChromaDBの埋め込みを用いた戦略文章とのコサイン類似度セマンティクス評価から、0.0〜1.0 の高度な多層スコアを算出。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interfaces</strong></td>
+<td style="text-align: left;"><code>interfaces/main.py</code></td>
+<td style="text-align: left;">各 CLI コマンド</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"><code>phronel start / init / config / learn / learn-list / learn-remove / learn-url / propose / observe / actions / approve / execute / report / optimize</code> をTyperで提供</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>interfaces/tui/app.py</code></td>
+<td style="text-align: left;"><code>PhronelApp.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+<td style="text-align: left;">Header、Footer、4つのタブ表示コンテナ（Dashboard, Action Review, Knowledge Base, Persona Settings）を統合構築。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>PhronelApp.on_mount</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;"><code>TuiLogHandler</code> ロギングを安全（クラッシュ防止）に接続し、5分間隔の定期ジョブ監視を開始。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>PhronelApp.update_ui_status</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">全画面およびマスタ・ディテールビュー（Action, Knowledge, Persona）をデータベースの最新状態へ同期（リフレッシュ）する。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>interfaces/tui/modals.py</code></td>
+<td style="text-align: left;"><code>ActionDetailModal.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+<td style="text-align: left;">アクションの詳細文や実行メタデータをポップアップ表示。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeImportModal.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+<td style="text-align: left;">画面中央にポップアップ表示され、ファイルパス/URLの自動判別（Auto-Detect）取り込みを仲介。</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>dashboard_view.py</code></td>
+<td style="text-align: left;"><code>AgentStatus.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>review_view.py</code></td>
+<td style="text-align: left;"><code>ActionReview.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>knowledge_view.py</code></td>
+<td style="text-align: left;"><code>KnowledgeBaseView.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>persona_view.py</code></td>
+<td style="text-align: left;"><code>PersonaSettingsView.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-feature-function-mapping">4. 各機能の関数の位置付け・ライフサイクル (Feature-Function Mapping)</h2>
+<p>Phronelの備える主要機能と、それを支える各関数の実行順序、協調関係をマッピングします。</p>
+<h3 id="41-1x-credentials-initialization">4.1. 機能1：Xアカウントの連携設定と認証 (Credentials &amp; Initialization)</h3>
+<p>初期化のステップであり、データベース設定テーブル（<code>AgentConfig</code>）を初期化し、認証を確立します。
+1. <code>interfaces/main.py (init)</code> コマンド起動。または TUI 起動。
+2. <code>core/db.py (init_db)</code> が実行され SQLite が構築される。
+3. ユーザーが入力した各種APIキー等が <code>core/config.py (ConfigManager.set)</code> によって永続化される。
+4. 実行時、<code>services/x_client.py (XClient._authenticate)</code> が呼び出され、<code>ConfigManager.get</code> を経由して認証キーを取得。
+5. Tweepy クライアントがセットアップされる（キーが欠損している場合はMockモードへ自動切替）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[User CLI] -&gt; init() 
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>                 |
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>                 v
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>            init_db() -&gt; SQLite Database Created
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>                 |
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>                 v
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>            ConfigManager.set() -&gt; Save X &amp; LLM API Keys
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                 |
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        (On First API call)
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>                 v
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>            XClient._authenticate() -&gt; Setup Tweepy V2 / V1.1 client
+</code></pre></div>
+<h3 id="42-2-rag-knowledge-ingestion-rag">4.2. 機能2：知識取り込みと RAG 連携 (Knowledge Ingestion &amp; RAG)</h3>
+<p>営業資料などのMarkdownやTextファイルを学習し、高精度の回答・投稿を可能にする機能です。
+1. <code>interfaces/main.py (learn)</code> コマンドからソースファイルを入力。
+2. <code>services/knowledge.py (KnowledgeBase.add_document)</code> が呼び出される。
+3. <code>RecursiveCharacterTextSplitter</code> がファイルを意味のあるチャンクに分割。
+4. <code>ChromaDB</code> (ベクトルDB) にテキストとソース情報を登録。
+5. <code>core/db.py</code> のセッションを介して、SQLite内の <code>KnowledgeChunk</code> テーブルに同じ内容をメタデータ付きで保存。
+6. 後続の投稿・リプライ生成時、<code>skills/brain.py (Creator._get_knowledge)</code> が <code>KnowledgeBase.query</code> を呼び出し、キーワードにマッチした高関連チャンクを取り出す。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[Markdown Document] -&gt; phronel learn &lt;path&gt;
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>                             |
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>                             v
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>                 KnowledgeBase.add_document()
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>                             |
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>         +-------------------+-------------------+
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>         | (Vector Space)                        | (Relational database)
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>         v                                       v
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ChromaDB (PersistentClient)             SQLite (KnowledgeChunk table)
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>         |                                       |
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>         +-------------------+-------------------+
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>                             |
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>                   (During Content Generation)
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>                             v
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>                 KnowledgeBase.query() -&gt; context chunks injected to DSPy prompt
+</code></pre></div>
+<h3 id="43-3x-trend-observation-proposal-pipeline">4.3. 機能3：X上のトレンド観測・自律的営業活動提案 (Trend Observation &amp; Proposal Pipeline)</h3>
+<p>定期的に情報を観測し、アクション候補をデータベースに格納する一連のパイプラインです。
+1. 定期タイマー、あるいは <code>interfaces/main.py (observe)</code> の手動実行をトリガーにする。
+2. <code>skills/observer.py (Observer.observe_keyword)</code> が起動し、<code>services/x_client.py (XClient.search_tweets)</code> を用いて関連ツイートを取得。
+3. 取得したツイート群を <code>skills/brain.py (Brain.analyze_timeline)</code> に流す。
+4. <code>Strategist</code> モジュールが DSPy で内容を分析、トレンドのトピック・感情・そしてアクション案（リプライや投稿）を決定する。
+5. 意思決定の裏付けとして <code>StrategyLog</code> をSQLiteに保存。
+6. <code>Creator</code> が RAG 知識を引き出して最適なつぶやき・リプライを作成。
+7. 作成されたコンテンツとターゲットを <code>ActionLog</code> に <code>pending</code> 状態で登録し、ユーザーのレビュー（承認）を待つ。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a> [Trigger / Timer] -&gt; Observer.observe_keyword()
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>                             |
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>                             v
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>                     XClient.search_tweets() -&gt; Get tweets from X
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                             |
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>                             v
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>                     Brain.analyze_timeline() 
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>                             | (uses CoT to derive sentiment, topic, action)
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>                             v
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>                     StrategyLog -&gt; Logged to SQLite (Explain &quot;Why&quot; decisions are made)
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>                             |
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>                             v
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>                     Creator.create_tweet() / create_reply() -&gt; Pulls RAG context
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>                             |
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>                             v
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>                     ActionLog -&gt; Saved in SQLite with &quot;pending&quot; status
+</code></pre></div>
+<h3 id="44-4-approval-flow-execution">4.4. 機能4：承認フローとアクション実行 (Approval Flow &amp; Execution)</h3>
+<p>提案されたアクションのレビュー、および実際のXへの実行を行います。
+1. <code>interfaces/main.py (actions)</code> で提案一覧を確認。またはTUIの「Action Review」画面を開く。
+2. ユーザーが承認を決定した際、<code>skills/executor.py (approve_action)</code> が動き、ステータスが <code>approved</code> に更新される。
+3. <code>skills/executor.py (execute_action)</code> が呼び出される。
+4. <code>core/config.py (ConfigManager.get("execution_mode"))</code> が <code>dry-run</code> の場合、APIコールをスキップし、ダミーレスポンスを生成。
+5. <code>manual / semi-auto / auto</code> の場合は、<code>services/x_client.py (XClient.post_tweet / reply_to_tweet / like_tweet)</code> を実行し、実際のSNSに配信。
+6. 送信が成功した場合、<code>ActionLog</code> のステータスを <code>executed</code> に変更し、レスポンスデータを <code>result_json</code> として保存、<code>executed_at</code> にタイムスタンプを押す。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a> [ActionLog: pending] -&gt; TUI / CLI approval
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>                             |
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>                             v
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>                         approve_action() -&gt; ActionLog: approved
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>                             |
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>                             v
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>                         execute_action()
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>                             |
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>                             +-----[execution_mode == &#39;dry-run&#39;]? 
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>                             |        |
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>                             |        v (Yes)
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>                             |     Simulate API payload -&gt; ActionLog: executed (DRY-RUN)
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>                             |
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>                             +-----(No: Real post)
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>                                      |
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>                                      v
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>                                  XClient.post_tweet() -&gt; Post to X
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>                                      |
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>                                      v (Success)
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>                                   Save Response JSON -&gt; ActionLog: executed
+</code></pre></div>
+<h3 id="45-5-reporting-optimization-cycle">4.5. 機能5：分析報告とプロンプト自動最適化 (Reporting &amp; Optimization Cycle)</h3>
+<p>システムの成果を可視化し、PDCA（改善活動）を自律的に推進するためのコア機能です。
+*   <strong>レポーティング (<code>phronel report</code> / TUI「Generate Report」ボタン)</strong>:
+    1. <code>skills/analyst.py (Analyst.generate_daily_report)</code> が実行される。
+    2. SQLiteから当日の <code>ActionLog</code> (実行済みアクション) と <code>StrategyLog</code> を取得・集計。
+    3. <code>services/x_client.py (XClient.get_tweet_metrics)</code> を叩き、実際の投稿のいいね数・インプレッション数を集計。
+    4. 集計データ（戦略、エンゲージメント、行動サマリー）を DSPy <code>GenerateDailyReport</code> に渡し、美しく整形された Markdown のインサイトレポートを作成して表示。</p>
+<ul>
+<li><strong>プロンプト最適化 (<code>phronel optimize</code> / TUI「Run Optimizer」ボタン)</strong>:<ol>
+<li><code>skills/analyst.py (Analyst.optimize_creator_prompts)</code> が実行される。</li>
+<li>過去のデータから、高エンゲージメントだったアクションとその時採用された戦略を「成功デモ」として準備。</li>
+<li>DSPyの <code>BootstrapFewShot</code> を使用して、Creatorモジュール（<code>GenerateTweet</code> 等の Signature）の Few-Shot 訓練を実行。</li>
+<li>指標に最も適合した最適プロンプトを <code>phronel_ai_agent/core/optimized_creator.json</code> としてファイル保存。</li>
+<li>次回Brainインスタンスが立ち上がる際、<code>Brain._load_optimized_prompts</code> が走り、このJSONファイルから最適化されたプロンプトを自動リロード。自律的にエージェントが「賢く」進化し続ける。</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>               (Optimization Triggered)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>                           |
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>                           v
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>               Analyst.optimize_creator_prompts()
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                           |
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                           v
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>               BootstrapFewShot (DSPy Compiler) -&gt; Trains using high-performing Action logs
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                           |
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                           v
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>               optimized_creator.json (Saves best few-shot demos to disk)
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>                           |
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>              (On Next App/Brain Boot)
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>                           v
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>               Brain._load_optimized_prompts() -&gt; Auto-loads into Creator Module
+</code></pre></div>
+<hr />
+<p>本ドキュメントは、Phronelの最新コードベースに基づいて作成されています。今後の機能拡張・リファクタリング時に参照し、システムの整合性を保つための基礎としてご活用ください。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

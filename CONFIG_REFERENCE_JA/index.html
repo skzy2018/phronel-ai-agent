@@ -1,0 +1,1824 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Autonomous SNS sales representative AI agent powered by DSPy and local RAG.">
+      
+      
+      
+        <link rel="canonical" href="https://skzy2018.github.io/phronel-ai-agent/CONFIG_REFERENCE_JA/">
+      
+      
+        <link rel="prev" href="../USER_GUIDE_JA/">
+      
+      
+        <link rel="next" href="../ARCHITECTURE_JA/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>設定リファレンス (JA) - Phronel AI Agent - Autonomous SNS Sales Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phronel-ai-agent-configuration-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Phronel AI Agent - Autonomous SNS Sales Agent" class="md-header__button md-logo" aria-label="Phronel AI Agent - Autonomous SNS Sales Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Phronel AI Agent - Autonomous SNS Sales Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              設定リファレンス (JA)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to Dark Mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to Dark Mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to Light Mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to Light Mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../USER_GUIDE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  User Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CONFIG_REFERENCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Configuration Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../ARCHITECTURE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  System Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../marketing/knowledge_phronel_intro/" class="md-tabs__link">
+          
+  
+  
+  About Phronel
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../index_JA/" class="md-tabs__link">
+          
+  
+  
+  日本語 (Japanese)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Phronel AI Agent - Autonomous SNS Sales Agent" class="md-nav__button md-logo" aria-label="Phronel AI Agent - Autonomous SNS Sales Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Phronel AI Agent - Autonomous SNS Sales Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../USER_GUIDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONFIG_REFERENCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Phronel
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About Phronel
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_phronel_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Value Proposal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_differentiation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Differentiation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_tech_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_usecases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use Cases & Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    日本語 (Japanese)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    日本語 (Japanese)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../USER_GUIDE_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ユーザーガイド (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設定リファレンス (JA)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設定リファレンス (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        設定の確認と変更
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="設定の確認と変更">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1つの設定を確認する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1つの設定を変更する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サポートされている設定キー一覧
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="サポートされている設定キー一覧">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基本設定・運用モード
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#x-twitter-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        X (Twitter) API 認証情報
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-dspy-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI モデル (DSPy / LLM) 設定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-env" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ハイブリッド環境変数一元管理 (.env)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. ハイブリッド環境変数一元管理 (.env)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phronel_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境変数一覧 (PHRONEL_ プレフィックス)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ai-agentpersona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. AIペルソナ専用テーブル (AgentPersona)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. AIペルソナ専用テーブル (AgentPersona)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        テーブル構造とフィールド一覧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-personasourcelink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. ペルソナ &amp; ナレッジ連関表 (PersonaSourceLink)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. ペルソナ &amp; ナレッジ連関表 (PersonaSourceLink)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        テーブル構造とフィールド一覧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-x-twitter-api-connection-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. X (Twitter) API レートリミットと接続遮断（Connection Reset）に関する注意事項
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. X (Twitter) API レートリミットと接続遮断（Connection Reset）に関する注意事項">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全な運用のためのガイドライン：
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    システムアーキテクチャ (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phronelについて (JA)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phronelについて (JA)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_phronel_intro_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要と基本価値提案 (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_differentiation_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    既存ツールとの違い (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_tech_stack_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    技術スタック (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_usecases_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    活用ユースケース (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        設定の確認と変更
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="設定の確認と変更">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1つの設定を確認する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1つの設定を変更する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サポートされている設定キー一覧
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="サポートされている設定キー一覧">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基本設定・運用モード
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#x-twitter-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        X (Twitter) API 認証情報
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-dspy-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI モデル (DSPy / LLM) 設定
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-env" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. ハイブリッド環境変数一元管理 (.env)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. ハイブリッド環境変数一元管理 (.env)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phronel_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境変数一覧 (PHRONEL_ プレフィックス)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ai-agentpersona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. AIペルソナ専用テーブル (AgentPersona)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. AIペルソナ専用テーブル (AgentPersona)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        テーブル構造とフィールド一覧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-personasourcelink" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. ペルソナ &amp; ナレッジ連関表 (PersonaSourceLink)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. ペルソナ &amp; ナレッジ連関表 (PersonaSourceLink)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        テーブル構造とフィールド一覧
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-x-twitter-api-connection-reset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. X (Twitter) API レートリミットと接続遮断（Connection Reset）に関する注意事項
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. X (Twitter) API レートリミットと接続遮断（Connection Reset）に関する注意事項">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安全な運用のためのガイドライン：
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="phronel-ai-agent-configuration-reference">Phronel AI Agent - Configuration Reference</h1>
+<p>Phronelの設定はSQLiteデータベースに保存され、CLIコマンド <code>phronel config</code> を用いて閲覧・変更することができます。</p>
+<h2 id="_1">設定の確認と変更</h2>
+<h3 id="1">1つの設定を確認する</h3>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>phronel_ai_agent<span class="w"> </span>config<span class="w"> </span>&lt;KEY&gt;
+</code></pre></div>
+例: <code>python -m phronel_ai_agent config execution_mode</code></p>
+<h3 id="1_1">1つの設定を変更する</h3>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>phronel_ai_agent<span class="w"> </span>config<span class="w"> </span>&lt;KEY&gt;<span class="w"> </span>&lt;VALUE&gt;
+</code></pre></div>
+例: <code>python -m phronel_ai_agent config execution_mode manual</code></p>
+<hr />
+<h2 id="_2">サポートされている設定キー一覧</h2>
+<h3 id="_3">基本設定・運用モード</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">キー</th>
+<th style="text-align: left;">デフォルト値</th>
+<th style="text-align: left;">説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>execution_mode</code></td>
+<td style="text-align: left;"><code>manual</code></td>
+<td style="text-align: left;">エージェントの自律動作のレベルを決定します。<br>- <code>manual</code>: バックグラウンドタスクは実行されません。<br>- <code>semi-auto</code>: 5分ごとの定期実行で情報収集と提案（Pending）を行いますが、投稿には手動の承認が必要です。<br>- <code>auto</code>: 情報収集からXへの実際の投稿までを全自動で実行します。<br>- <code>dry-run</code>: 投稿のシミュレーションのみを行い、X APIにはリクエストを送信しません。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>observe_interval_seconds</code></td>
+<td style="text-align: left;"><code>3600</code></td>
+<td style="text-align: left;">エージェントのバックグラウンド監視（<code>observe</code>）の実行間隔を秒単位で決定します。10秒以上の値を指定する必要があります（デフォルト: 3600秒 = 1時間）。X (Twitter) API のレートリミットおよび接続切断エラーを回避するため、本番環境では3600秒以上の設定を強く推奨します。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="x-twitter-api">X (Twitter) API 認証情報</h3>
+<p>初期設定時に <code>python -m phronel_ai_agent init</code> で登録されるAPIキー群です。
+これらはX Developer Portalから取得したものを設定します。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">キー</th>
+<th style="text-align: left;">説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>x_api_key</code></td>
+<td style="text-align: left;">Consumer Key (API Key)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>x_api_secret</code></td>
+<td style="text-align: left;">Consumer Secret (API Secret)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>x_bearer_token</code></td>
+<td style="text-align: left;">OAuth 2.0 Bearer Token (必須ではありませんが推奨)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>x_access_token</code></td>
+<td style="text-align: left;">Access Token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>x_access_token_secret</code></td>
+<td style="text-align: left;">Access Token Secret</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ai-dspy-llm">AI モデル (DSPy / LLM) 設定</h3>
+<p>エージェントの「脳」として機能するLLMの認証情報です。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">キー</th>
+<th style="text-align: left;">説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>gemini_api_key</code></td>
+<td style="text-align: left;">Google Gemini APIを利用するためのキーです。未設定の場合、モック（ダミー）モードで動作します。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-env">4. ハイブリッド環境変数一元管理 (.env)</h2>
+<p>Phronelは、インフラ・システム基本設計に関する設定を環境変数（または <code>.env</code> ファイル）で定義できます。
+さらに、実行モードや検索キーワードなどの一部の設定は、「ユーザーがTUIやCLIで動的設定した値」を最優先し、DBが未設定時の初期デフォルトシード値として環境変数（<code>.env</code>）からフォールバック読み込みする<strong>ハイブリッド優先度モデル</strong>を採用しています。</p>
+<h3 id="phronel_">環境変数一覧 (PHRONEL_ プレフィックス)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">環境変数名</th>
+<th style="text-align: left;">デフォルト値</th>
+<th style="text-align: left;">説明 (管理レイヤー)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_DB_PATH</code></strong></td>
+<td style="text-align: left;"><code>phronel_agent.db</code></td>
+<td style="text-align: left;"><strong>インフラ設定</strong>: SQLiteデータベースファイルの物理保存パス。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_CHROMA_DIR</code></strong></td>
+<td style="text-align: left;"><code>./chroma_db</code></td>
+<td style="text-align: left;"><strong>インフラ設定</strong>: ChromaDB ベクトルストアの物理保存先フォルダ。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_LLM_MODEL</code></strong></td>
+<td style="text-align: left;"><code>gemini-2.5-flash</code></td>
+<td style="text-align: left;"><strong>インフラ設定</strong>: 推論に使用する Google Gemini のデフォルトモデル名。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_OPTIMIZED_PROMPT_PATH</code></strong></td>
+<td style="text-align: left;"><code>phronel_ai_agent/core/optimized_creator.json</code></td>
+<td style="text-align: left;"><strong>インフラ設定</strong>: DSPyオプティマイザで自己生成した Few-shot プロンプトデータの保存/読込先パス。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_EXECUTION_MODE</code></strong></td>
+<td style="text-align: left;"><code>manual</code></td>
+<td style="text-align: left;"><strong>ハイブリッド</strong>: エージェントのデフォルト起動モード（DB設定優先）。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_OBSERVE_INTERVAL_SECONDS</code></strong></td>
+<td style="text-align: left;"><code>3600</code></td>
+<td style="text-align: left;"><strong>ハイブリッド</strong>: バックグラウンド監視（<code>observe</code>）の実行間隔秒数。10秒以上の値が必要（DB設定優先）。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_MAX_RESULTS</code></strong></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;"><strong>インフラ設定</strong>: X 検索・観測時に収集する最大ツイート取得件数（API消費制限・費用抑制用）。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_GEMINI_API_KEY</code></strong></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><strong>クレデンシャル</strong>: Gemini API キー。（<code>gemini_api_key</code> キーと同等、環境変数優先）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_X_BEARER_TOKEN</code></strong></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><strong>クレデンシャル</strong>: X OAuth 2.0 Bearer Token。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_X_API_KEY</code></strong></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><strong>クレデンシャル</strong>: X API Key (Consumer Key)。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_X_API_SECRET</code></strong></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><strong>クレデンシャル</strong>: X API Secret (Consumer Secret)。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_X_ACCESS_TOKEN</code></strong></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><strong>クレデンシャル</strong>: X Access Token。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PHRONEL_X_ACCESS_TOKEN_SECRET</code></strong></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><strong>クレデンシャル</strong>: X Access Token Secret。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-ai-agentpersona">5. AIペルソナ専用テーブル (<code>AgentPersona</code>)</h2>
+<p>AIのキャラクター、口調（トーン）、名前、営業戦略方針などは、アプリケーションの技術設定とは明確に分離された独立したデータベーステーブル <strong><code>AgentPersona</code></strong> で管理されます。
+TUIの「Persona Settings」タブから視覚的にCRUD（追加・編集・削除・有効化）操作を行うことができ、複数のペルソナ（Ken、Phronelなど）を切り替えて運用することが可能です。</p>
+<h3 id="_4">テーブル構造とフィールド一覧</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">カラム名</th>
+<th style="text-align: left;">データ型</th>
+<th style="text-align: left;">デフォルト設定値</th>
+<th style="text-align: left;">役割と説明（プロンプトインジェクションマッピング）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>id</code></strong></td>
+<td style="text-align: left;"><code>INTEGER</code> (主キー)</td>
+<td style="text-align: left;">自動採番</td>
+<td style="text-align: left;">レコード識別用ID。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>name</code></strong></td>
+<td style="text-align: left;"><code>VARCHAR</code></td>
+<td style="text-align: left;"><code>"Phronel"</code></td>
+<td style="text-align: left;">AIの<strong>名前</strong>。自己紹介や戦略定義時に <code>Identity: You are '{name}'</code> としてインジェクションされます。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>role</code></strong></td>
+<td style="text-align: left;"><code>VARCHAR</code></td>
+<td style="text-align: left;"><code>"SNS Sales Representative..."</code></td>
+<td style="text-align: left;">AIの<strong>専門分野・役職</strong>。<code>role: '{role}'</code> としてAIの視点定義にブレンドマッピングされます。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>tone</code></strong></td>
+<td style="text-align: left;"><code>VARCHAR</code></td>
+<td style="text-align: left;"><code>"Professional, helpful, ..."</code></td>
+<td style="text-align: left;">AIの<strong>キャラクター・話し方・トーン</strong>。DSPyの <code>style</code> パラメータに入力され、絵文字数や専門性を統御します。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>constraints</code></strong></td>
+<td style="text-align: left;"><code>VARCHAR</code></td>
+<td style="text-align: left;"><code>"Max 280 chars. ..."</code></td>
+<td style="text-align: left;">送信時の<strong>制約・足切りルール</strong>。DSPyの <code>constraints</code> パラメータに入力され、無駄な生JSONの出力などを強力に防止します。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>sales_strategy</code></strong></td>
+<td style="text-align: left;"><code>VARCHAR</code></td>
+<td style="text-align: left;"><code>"Focus on providing value..."</code></td>
+<td style="text-align: left;">AIがSNS営業で満たすべき<strong>ビジネス戦略・行動規範</strong>。DSPyの <code>strategy</code> パラメータへリアルタイム流し込みされます。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>observe_keyword</code></strong></td>
+<td style="text-align: left;"><code>VARCHAR</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">ペルソナ固有の監視検索キーワード（カンマ区切りで <code>生成AI, AIエージェント</code> のように複数指定可能）。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>is_active</code></strong></td>
+<td style="text-align: left;"><code>BOOLEAN</code></td>
+<td style="text-align: left;"><code>True</code> / <code>False</code></td>
+<td style="text-align: left;"><strong>有効化フラグ</strong>。アクティブにされたペルソナが <code>get_active_persona()</code> でJITで読み込まれ、AIエージェントの現在の人格に即時適用されます。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-personasourcelink">6. ペルソナ &amp; ナレッジ連関表 (<code>PersonaSourceLink</code>)</h2>
+<p>複数のペルソナ間でナレッジベース（ファイル/URL）を自在に分離、または共有する多対多（N:N）の関係をデータベース上で動的に永続化・結合するための中間テーブルです。</p>
+<h3 id="_5">テーブル構造とフィールド一覧</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">カラム名</th>
+<th style="text-align: left;">データ型</th>
+<th style="text-align: left;">デフォルト設定値</th>
+<th style="text-align: left;">役割と説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>persona_id</code></strong></td>
+<td style="text-align: left;"><code>INTEGER</code> (主キー, 外部キー)</td>
+<td style="text-align: left;">なし</td>
+<td style="text-align: left;">関連付け対象のペルソナID（<code>AgentPersona.id</code>への参照）。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>source</code></strong></td>
+<td style="text-align: left;"><code>VARCHAR</code> (主キー)</td>
+<td style="text-align: left;">なし</td>
+<td style="text-align: left;">関連付け対象のドキュメントソース名（ファイルパスやURL文字列）。</td>
+</tr>
+</tbody>
+</table>
+<p>推論実行時、ChromaDBの検索パラメータ <code>where</code> に対して、本テーブルに格納されている該当ペルソナの許可ソース一覧が <strong><code>{"source": {"$in": linked_sources}}</code></strong> 演算子として動的にインジェクションされ、別ペルソナのドメイン知識との相互混入（ハルシネーション）を論理的に100%防止します。</p>
+<hr />
+<h2 id="7-x-twitter-api-connection-reset">7. X (Twitter) API レートリミットと接続遮断（Connection Reset）に関する注意事項</h2>
+<p>X.com (Twitter) APIは、データの読み込み（キーワード検索）および書き込み（ツイート、いいね、フォロー）の双方に対して非常に厳格なレートリミット（回数制限）を課しています。これを無視して高頻度の自動巡回を行うと、アカウントの制限や、API接続自体を物理的に遮断されるペナルティが発生します。</p>
+<h3 id="_6">安全な運用のためのガイドライン：</h3>
+<ul>
+<li><strong>推奨監視間隔</strong>: 本番運用では <code>observe_interval_seconds</code> を必ず <strong><code>3600</code>秒 (1時間) 以上</strong> に設定してください。</li>
+<li>巡回ループを5分未満などの超短期間に設定すると、API呼び出し回数が <code>(巡回回数) × (登録キーワード数)</code> で掛け算的に増大し、Basicプランの上限である「15分間に100リクエスト」を一瞬で超過して <code>HTTP 429 Too Many Requests</code> エラーが発生します。</li>
+<li><strong>Connection Reset by Peer（強制切断）とアカウントロック</strong>:</li>
+<li>APIエラー（429超過や、403権限不足）が出ている状態でプログラムが諦めずに数分おきにリクエストを送り続けると、X APIの前段にあるセキュリティシステム（Cloudflare等のWAF）からスパム攻撃と判定され、IPアドレス単位でポート接続を強制切断されるようになります。これが <code>Connection reset by peer</code> エラーの正体です。</li>
+<li>このエラーが発生した場合は、<strong>直ちにエージェントシステムを停止し、最低でも1〜2時間（できれば24時間）アクセスを行わずに「クールダウン」させてください。</strong> 執拗にAPIリクエストを再試行し続けると、開発者ポータルアプリの強制停止やXアカウントの永久凍結に繋がります。</li>
+<li><strong>書き込み権限（Read and Write）の適用</strong>:</li>
+<li>開発者ポータルでアプリの権限設定を「Read」から「Read and Write」に変更した際、必ず <strong>「Access TokenとSecretの再生成（Regenerate）」</strong> を行ってください。古いトークンのままでは書き込み操作（ツイートやいいね）時に <code>You are not permitted...</code> エラーが発生し続けます。</li>
+<li><strong>検索キーワードを厳選する</strong>:</li>
+<li>監視対象のキーワードは、ノイズが少なく確度の高い <strong>3〜5個程度</strong> に厳選してください。キーワードが多いほど、1回の自動巡回ごとのAPIリクエスト消費がキーワード倍で加速します。</li>
+</ul>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2086 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Autonomous SNS sales representative AI agent powered by DSPy and local RAG.">
+      
+      
+      
+        <link rel="canonical" href="https://skzy2018.github.io/phronel-ai-agent/ARCHITECTURE/">
+      
+      
+        <link rel="prev" href="../CONFIG_REFERENCE/">
+      
+      
+        <link rel="next" href="../marketing/knowledge_phronel_intro/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>System Architecture - Phronel AI Agent - Autonomous SNS Sales Agent</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phronel-ai-agent-system-architecture-code-map" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Phronel AI Agent - Autonomous SNS Sales Agent" class="md-header__button md-logo" aria-label="Phronel AI Agent - Autonomous SNS Sales Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Phronel AI Agent - Autonomous SNS Sales Agent
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              System Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to Dark Mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to Dark Mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to Light Mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to Light Mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../USER_GUIDE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  User Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../CONFIG_REFERENCE/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Configuration Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  System Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../marketing/knowledge_phronel_intro/" class="md-tabs__link">
+          
+  
+  
+  About Phronel
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../index_JA/" class="md-tabs__link">
+          
+  
+  
+  日本語 (Japanese)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Phronel AI Agent - Autonomous SNS Sales Agent" class="md-nav__button md-logo" aria-label="Phronel AI Agent - Autonomous SNS Sales Agent" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Phronel AI Agent - Autonomous SNS Sales Agent
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../USER_GUIDE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONFIG_REFERENCE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Directory Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-data-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Data Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Data Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-agentconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. AgentConfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-knowledgechunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. KnowledgeChunk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-actionlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. ActionLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-strategylog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. StrategyLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-agentpersona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. AgentPersona
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-function-method-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Function &amp; Method Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-feature-execution-lifecycles-feature-function-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Feature Execution Lifecycles (Feature-Function Mapping)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Feature Execution Lifecycles (Feature-Function Mapping)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-setup-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Setup &amp; Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-ingesting-knowledge-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Ingesting Knowledge (RAG)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-cognitive-pipeline-observe-strategize-propose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Cognitive Pipeline (Observe ➔ Strategize ➔ Propose)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-review-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Review &amp; Execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-continuous-prompt-optimization-analyst" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5. Continuous Prompt Optimization (Analyst)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Phronel
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About Phronel
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_phronel_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview & Value Proposal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_differentiation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Product Differentiation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_tech_stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_usecases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Use Cases & Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    日本語 (Japanese)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    日本語 (Japanese)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../USER_GUIDE_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ユーザーガイド (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CONFIG_REFERENCE_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設定リファレンス (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    システムアーキテクチャ (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_5" id="__nav_6_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phronelについて (JA)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phronelについて (JA)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_phronel_intro_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要と基本価値提案 (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_differentiation_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    既存ツールとの違い (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_tech_stack_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    技術スタック (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../marketing/knowledge_usecases_JA/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    活用ユースケース (JA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Directory Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-data-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Data Models
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Data Models">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-agentconfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. AgentConfig
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-knowledgechunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. KnowledgeChunk
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-actionlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. ActionLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-strategylog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. StrategyLog
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-agentpersona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5. AgentPersona
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-function-method-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Function &amp; Method Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-feature-execution-lifecycles-feature-function-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Feature Execution Lifecycles (Feature-Function Mapping)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Feature Execution Lifecycles (Feature-Function Mapping)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-setup-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Setup &amp; Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-ingesting-knowledge-rag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Ingesting Knowledge (RAG)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-cognitive-pipeline-observe-strategize-propose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3. Cognitive Pipeline (Observe ➔ Strategize ➔ Propose)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-review-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4. Review &amp; Execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-continuous-prompt-optimization-analyst" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5. Continuous Prompt Optimization (Analyst)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="phronel-ai-agent-system-architecture-code-map">Phronel AI Agent - System Architecture &amp; Code Map</h1>
+<p>This document is a comprehensive developer guide detailing the system architecture, database models, method mappings, and execution lifecycles for the <strong>Phronel AI Agent</strong>—the autonomous SNS sales representative.</p>
+<hr />
+<h2 id="1-directory-structure">1. Directory Structure</h2>
+<p>The project implements a clean layered architecture (4-tier system). This separation of concerns ensures low coupling, making unit testing and feature extensions straightforward.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sns_agent/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── .gitignore                   # Environmental and Git ignore configuration
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── .env.example                 # Environment variables setup template
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── .env                         # Local secret API keys and configuration settings
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── GEMINI.md                    # AI assistant context guidelines (private)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── README.md                    # Project landing page &amp; quickstart
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── requirements.txt             # Pip package dependencies
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├── docs/                        # Public user manuals &amp; references
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── ARCHITECTURE.md          # [This Doc] Technical Architecture &amp; Code Map
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── ARCHITECTURE_JA.md       # Japanese version of the Technical Architecture
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   ├── index.md                 # English documentation landing page
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   ├── index_JA.md              # Japanese documentation landing page
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   ├── USER_GUIDE.md            # English installation &amp; setup guide
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│   ├── USER_GUIDE_JA.md         # Japanese installation &amp; setup guide
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── CONFIG_REFERENCE.md      # English config settings reference
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   └── CONFIG_REFERENCE_JA.md   # Japanese config settings reference
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├── tests/                       # Automated test suites
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   ├── conftest.py              # Test harness and secure environment isolation
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   ├── test_db.py               # Database integration tests
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   ├── test_llm_logger.py       # LLM interaction logging tests
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│   ├── test_metrics.py          # Evaluator and multi-tier metrics tests
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│   ├── test_observer.py         # Keyword tracking and parsing logic tests
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│   └── test_phase1~4.py         # Phase-by-phase end-to-end integration tests
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>└── phronel_ai_agent/             # Core Python codebase
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    ├── __init__.py              # Package initializer
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    ├── __main__.py              # CLI executable entry point
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    ├── core/                    # [Core Tier] Database &amp; Config management
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    │   ├── db.py                # Database connection &amp; repository helpers
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    │   ├── config.py            # Hybrid configuration manager (ConfigManager)
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    │   └── models.py            # SQLite schemas defined via SQLModel
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    ├── interfaces/              # [Presentation Tier] Terminal interfaces (TUI/CLI)
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    │   ├── main.py              # Typer CLI commands
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    │   └── tui/                 # Textual terminal UI package
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    │       ├── __init__.py      # Package entry point
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    │       ├── app.py           # Core TUI driver &amp; real-time log stream
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    │       ├── modals.py        # Dialog modals (Action details, import knowledge modal)
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    │       ├── dashboard_view.py# Status summary widget &amp; metrics visualization
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>    │       ├── review_view.py   # Draft review and action execution console
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    │       ├── knowledge_view.py# Vector RAG management &amp; visual previewer
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>    │       └── persona_view.py  # Persona settings visual form editor
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>    ├── services/                # [Infrastructure Tier] External APIs &amp; ChromaDB
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>    │   ├── x_client.py          # Tweepy wrapper for X API (Online / Mock fallback)
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>    │   └── knowledge.py         # ChromaDB client &amp; vector store integration (RAG)
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>    └── skills/                  # [Domain/Skill Tier] Autonomous Agent Logic
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>        ├── brain.py             # Strategic thinking core (DSPy modules)
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        ├── observer.py          # Background trend scouter &amp; parser
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>        ├── executor.py          # Action publisher (Tweets, Replies, Likes)
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>        ├── analyst.py           # Performance reporter &amp; prompt compiler (Analyst)
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>        └── metrics.py           # Multi-tier quality evaluator for DSPy compiles
+</code></pre></div>
+<hr />
+<h2 id="2-data-models">2. Data Models</h2>
+<p>All relational models are defined in <code>phronel_ai_agent/core/models.py</code> using <code>SQLModel</code> (inherits from SQLAlchemy/Pydantic) and are saved to the local SQLite database (<code>phronel_agent.db</code>).</p>
+<h3 id="21-agentconfig">2.1. AgentConfig</h3>
+<p>Key-Value store for system-wide variables (API keys, execution modes, keywords).
+*   <strong><code>key</code> (str, PK)</strong>: Config item key (e.g., <code>gemini_api_key</code>, <code>execution_mode</code>).
+*   <strong><code>value</code> (str)</strong>: Config value.
+*   <strong><code>description</code> (Optional[str])</strong>: Brief usage text.
+*   <strong><code>updated_at</code> (datetime)</strong>: Timestamp of last edit.</p>
+<h3 id="22-knowledgechunk">2.2. KnowledgeChunk</h3>
+<p>RAG chunks corresponding to vectors stored in ChromaDB.
+*   <strong><code>id</code> (Optional[int], PK)</strong>: Auto-increment index.
+*   <strong><code>content</code> (str)</strong>: Splitted text segment.
+*   <strong><code>source</code> (str)</strong>: Original file path or web URL source.
+*   <strong><code>embedding_id</code> (Optional[str])</strong>: Correlated vector ID inside ChromaDB.
+*   <strong><code>created_at</code> (datetime)</strong>: Timestamp of ingestion.</p>
+<h3 id="23-actionlog">2.3. ActionLog</h3>
+<p>Tracks every action (tweets, replies, likes, follows) suggested by the AI or scheduled for review.
+*   <strong><code>id</code> (Optional[int], PK)</strong>: Auto-increment index.
+*   <strong><code>action_type</code> (str)</strong>: <code>'tweet'</code>, <code>'reply'</code>, <code>'like'</code>, or <code>'follow'</code>.
+*   <strong><code>content</code> (Optional[str])</strong>: Body text.
+*   <strong><code>target_id</code> (Optional[str])</strong>: Recipient tweet ID or user ID.
+*   <strong><code>status</code> (str)</strong>: Processing state (<code>pending</code>, <code>approved</code>, <code>executed</code>, <code>failed</code>).
+*   <strong><code>strategy_log_id</code> (Optional[int])</strong>: Foreign key linking directly to the decision logic (<code>StrategyLog</code>).
+*   <strong><code>result_json</code> (Optional[str])</strong>: API response payload in raw JSON format.
+*   <strong><code>created_at</code> (datetime)</strong>: Draft timestamp.
+*   <strong><code>executed_at</code> (Optional[datetime])</strong>: Successful publication timestamp.</p>
+<h3 id="24-strategylog">2.4. StrategyLog</h3>
+<p>Stores the Chain-of-Thought (CoT) reasoning behind each decision, forming the basis for reports and DSPy optimization.
+*   <strong><code>id</code> (Optional[int], PK)</strong>: Auto-increment index.
+*   <strong><code>context_summary</code> (str)</strong>: Summary of the situation (e.g., "Timeline analysis").
+*   <strong><code>strategy_text</code> (str)</strong>: Deep strategic reasoning generated by the AI's strategist module.
+*   <strong><code>model_name</code> (str)</strong>: Active LLM name (e.g., <code>gemini-2.5-flash</code>).
+*   <strong><code>created_at</code> (datetime)</strong>: Log timestamp.</p>
+<h3 id="25-agentpersona">2.5. AgentPersona</h3>
+<p>Stores the identity presets for hot-swapping AI characters.
+*   <strong><code>id</code> (Optional[int], PK)</strong>: Auto-increment index.
+*   <strong><code>name</code> (str)</strong>: Persona name (e.g., <code>"Phronel"</code>).
+*   <strong><code>role</code> (str)</strong>: Core profession/perspective (e.g., <code>"SNS Sales Rep..."</code>).
+*   <strong><code>tone</code> (str)</strong>: Character tone of voice (e.g., <code>"Professional, polite, helpful..."</code>).
+*   <strong><code>constraints</code> (str)</strong>: Negative rules and output constraints (e.g., <code>"Max 280 chars..."</code>).
+*   <strong><code>sales_strategy</code> (str)</strong>: Dynamic guidelines maps to DSPy parameters.
+*   <strong><code>is_active</code> (bool)</strong>: Status flag. The active record is loaded JIT to dictate the agent's personality.</p>
+<hr />
+<h2 id="3-function-method-map">3. Function &amp; Method Map</h2>
+<p>This detailed map covers class signatures and operational descriptions across all application layers.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tier</th>
+<th style="text-align: left;">Module / File</th>
+<th style="text-align: left;">Class / Method</th>
+<th style="text-align: left;">Signature</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Core</strong></td>
+<td style="text-align: left;"><code>core/db.py</code></td>
+<td style="text-align: left;"><code>init_db</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">Initializes SQLite DB tables using SQLModel.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_session</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>Session</code></td>
+<td style="text-align: left;">Yields/creates a new database session.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_actions_by_status</code></td>
+<td style="text-align: left;"><code>(statuses: List[str])</code> -&gt; <code>List[ActionLog]</code></td>
+<td style="text-align: left;">Returns actions matching a list of statuses in reverse chronological order.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_pending_action_count</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>int</code></td>
+<td style="text-align: left;">Returns count of <code>pending</code> draft actions in the database.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>update_action_status</code></td>
+<td style="text-align: left;"><code>(action_id: int, new_status: str)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">Updates and saves an action log status.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>get_active_persona</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">Fetches the active persona; automatically generates default JIT if missing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>save_active_persona</code></td>
+<td style="text-align: left;"><code>(name, role, tone, constraints, strategy)</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">Saves or updates active persona settings in a single operation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>list_personas</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>List[AgentPersona]</code></td>
+<td style="text-align: left;">Returns all registered personas in SQLite.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>add_persona</code></td>
+<td style="text-align: left;"><code>(name, role, tone, constraints, strategy)</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">Inserts a new persona record.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>update_persona</code></td>
+<td style="text-align: left;"><code>(id, name, role, tone, constraints, strategy)</code> -&gt; <code>AgentPersona</code></td>
+<td style="text-align: left;">Updates the persona record matching the specified ID.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>delete_persona</code></td>
+<td style="text-align: left;"><code>(id)</code> -&gt; <code>bool</code></td>
+<td style="text-align: left;">Deletes the persona record matching the specified ID (active personas are protected from deletion).</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>activate_persona</code></td>
+<td style="text-align: left;"><code>(id)</code> -&gt; <code>bool</code></td>
+<td style="text-align: left;">Activates the target persona and deactivates all others.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>core/config.py</code></td>
+<td style="text-align: left;"><code>ConfigManager.get</code></td>
+<td style="text-align: left;"><code>(key: str, default: Optional[str])</code> -&gt; <code>Optional[str]</code></td>
+<td style="text-align: left;">Fetches config from DB with fallback to environmental variable <code>PHRONEL_&lt;KEY&gt;</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>ConfigManager.set</code></td>
+<td style="text-align: left;"><code>(key: str, value: str, description: Optional[str])</code> -&gt; <code>AgentConfig</code></td>
+<td style="text-align: left;">Saves or updates config key-value pair in database.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Services</strong></td>
+<td style="text-align: left;"><code>services/knowledge.py</code></td>
+<td style="text-align: left;"><code>KnowledgeBase.__init__</code></td>
+<td style="text-align: left;"><code>(persist_directory: Optional[str])</code></td>
+<td style="text-align: left;">Prepares ChromaDB client and splitter for lazy JIT load.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.add_document</code></td>
+<td style="text-align: left;"><code>(content: str, source: str)</code> -&gt; <code>int</code></td>
+<td style="text-align: left;">Splits text into semantic chunks, indexing in ChromaDB and storing in SQLite.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.add_url</code></td>
+<td style="text-align: left;"><code>(url: str)</code> -&gt; <code>int</code></td>
+<td style="text-align: left;">Crawls URL, cleans HTML elements, and stores plain text in ChromaDB and SQLite.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.list_sources</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>List[Dict[str, Any]]</code></td>
+<td style="text-align: left;">Queries SQLite to list ingested knowledge sources, total chunks, and ingestion times.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.get_chunks_by_source</code></td>
+<td style="text-align: left;"><code>(source: str)</code> -&gt; <code>List[KnowledgeChunk]</code></td>
+<td style="text-align: left;">Retrieves all text chunks associated with a specific knowledge source.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.delete_source</code></td>
+<td style="text-align: left;"><code>(source: str)</code> -&gt; <code>int</code></td>
+<td style="text-align: left;">Synchronously deletes source chunks from both SQLite and ChromaDB.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeBase.query</code></td>
+<td style="text-align: left;"><code>(query_text: str, n_results: int)</code> -&gt; <code>List[str]</code></td>
+<td style="text-align: left;">Queries ChromaDB for semantic matching context chunks to use as RAG context.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>services/x_client.py</code></td>
+<td style="text-align: left;"><code>XClient.__init__</code></td>
+<td style="text-align: left;"><code>()</code></td>
+<td style="text-align: left;">Initializes internal authentication variables and flags.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient._authenticate</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">Retrieves credentials from <code>ConfigManager</code> and initializes Tweepy clients (v2 and v1.1). Defaults to Mock mode if keys are missing.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.post_tweet</code></td>
+<td style="text-align: left;"><code>(text: str)</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">Publishes a tweet via the X API (prints to stdout in Mock mode).</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.like_tweet</code></td>
+<td style="text-align: left;"><code>(tweet_id: str)</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">Likes a specified tweet on X.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.reply_to_tweet</code></td>
+<td style="text-align: left;"><code>(tweet_id: str, text: str)</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">Replies to a specific tweet on X.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.search_tweets</code></td>
+<td style="text-align: left;"><code>(query: str, max_results: int)</code> -&gt; <code>Any</code></td>
+<td style="text-align: left;">Searches for recent tweets using relevant keywords.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>XClient.get_tweet_metrics</code></td>
+<td style="text-align: left;"><code>(tweet_ids: List[str])</code> -&gt; <code>List[dict]</code></td>
+<td style="text-align: left;">Retrieves a batch of statistical metrics (likes, retweets, etc.) for a list of tweet IDs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Skills</strong></td>
+<td style="text-align: left;"><code>skills/brain.py</code></td>
+<td style="text-align: left;"><code>Strategist.analyze_timeline</code></td>
+<td style="text-align: left;"><code>(tweets: List[str])</code> -&gt; <code>Optional[dict]</code></td>
+<td style="text-align: left;">Analyzes tweets using DSPy CoT (<code>AnalyzeTrend</code> Signature) to formulate a strategy.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Creator._get_knowledge</code></td>
+<td style="text-align: left;"><code>(topic: str)</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">Queries knowledge base for chunks related to a topic and compiles them into a single RAG context string.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Creator.create_tweet</code></td>
+<td style="text-align: left;"><code>(strategy_insight: str, topic: str)</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">Generates a new tweet, dynamically injecting the active persona's name, role, tone, constraints, and sales strategy.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Creator.create_reply</code></td>
+<td style="text-align: left;"><code>(target_tweet: str, strategy_insight: str, topic: str)</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">Generates a reply to a target tweet, dynamically injecting the active persona's configuration.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain.__init__</code></td>
+<td style="text-align: left;"><code>()</code></td>
+<td style="text-align: left;">Initializes member variables. Defers (lazy loads) LLM configuration setup and few-shot prompt file loading.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain._ensure_ready</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">Performs JIT initialization of the Gemini LLM configuration and loads few-shot prompts from disk upon the first inference call.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain.process_and_propose</code></td>
+<td style="text-align: left;"><code>(source_data: list, context_summary: str)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">Complete cognitive pipeline: Analyzes observation data (list/str), merges the active persona context, generates and registers an action proposal, and links the resulting <code>ActionLog</code> and <code>StrategyLog</code> via foreign key.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Brain.create_tweet_proposal</code></td>
+<td style="text-align: left;"><code>(topic: str)</code> -&gt; <code>ActionLog</code></td>
+<td style="text-align: left;">Generates a new tweet draft based on a topic using RAG, and saves it in a <code>pending</code> state.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/observer.py</code></td>
+<td style="text-align: left;"><code>Observer.observe_keyword</code></td>
+<td style="text-align: left;"><code>(keyword: str, max_results: int)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">Searches X for a specific keyword and streams matching tweets (including tweet IDs and user IDs as metadata) into <code>Brain.process_and_propose</code> to propose autonomous actions.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/executor.py</code></td>
+<td style="text-align: left;"><code>execute_action</code></td>
+<td style="text-align: left;"><code>(action_id: int)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">Executes the specified action. If <code>execution_mode</code> is <code>dry-run</code>, simulates execution and logs output without calling the X API. Records success/failure state in the database.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>approve_action</code></td>
+<td style="text-align: left;"><code>(action_id: int)</code> -&gt; <code>Optional[ActionLog]</code></td>
+<td style="text-align: left;">Updates an action's status from <code>pending</code> to <code>approved</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/analyst.py</code></td>
+<td style="text-align: left;"><code>Analyst.generate_daily_report</code></td>
+<td style="text-align: left;"><code>(target_date: Optional[datetime])</code> -&gt; <code>str</code></td>
+<td style="text-align: left;">Aggregates action logs, strategy logs, and engagement metrics from X for the day, and uses DSPy to generate a polished Markdown insight report.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>Analyst.optimize_creator_prompts</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>bool</code></td>
+<td style="text-align: left;">Mines successful actions and their corresponding strategy logs from the SQLite database, compiles them into training examples, and runs the DSPy <code>BootstrapFewShot</code> optimizer to save optimized few-shot prompt configurations to disk.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>skills/metrics.py</code></td>
+<td style="text-align: left;"><code>phronel_multi_tier_metric</code></td>
+<td style="text-align: left;"><code>(example, pred, trace)</code> -&gt; <code>float</code></td>
+<td style="text-align: left;"><strong>[Evaluation Layer]</strong> Evaluates responses against guardrails (character limit of 280, empty checks, hallucination checks), aesthetic constraints (hashtag/emoji count limits), and semantic consistency with strategic goals using ChromaDB embeddings, returning a multi-tiered score between 0.0 and 1.0.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Interfaces</strong></td>
+<td style="text-align: left;"><code>interfaces/main.py</code></td>
+<td style="text-align: left;">CLI Commands</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Provides commands (<code>start</code>, <code>init</code>, <code>config</code>, <code>learn</code>, <code>learn-list</code>, <code>learn-remove</code>, <code>learn-url</code>, <code>propose</code>, <code>observe</code>, <code>actions</code>, <code>approve</code>, <code>execute</code>, <code>report</code>, <code>optimize</code>) powered by Typer.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>interfaces/tui/app.py</code></td>
+<td style="text-align: left;"><code>PhronelApp.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+<td style="text-align: left;">Combines the header, footer, and the four view tabs (Dashboard, Action Review, Knowledge Base, Persona Settings) into the main TUI container.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>PhronelApp.on_mount</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">Securely registers the <code>TuiLogHandler</code> logging handler to prevent UI crashes and starts a periodic background polling job scheduled every 5 minutes.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>PhronelApp.update_ui_status</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>None</code></td>
+<td style="text-align: left;">Synchronizes all views (Dashboard, Actions, RAG, Personas) with the latest database state.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>interfaces/tui/modals.py</code></td>
+<td style="text-align: left;"><code>ActionDetailModal.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+<td style="text-align: left;">Renders a modal popup displaying action details and execution metadata.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>KnowledgeImportModal.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+<td style="text-align: left;">Renders a centered import dialog, coordinating automatic file path or URL detection.</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>dashboard_view.py</code></td>
+<td style="text-align: left;"><code>AgentStatus.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>review_view.py</code></td>
+<td style="text-align: left;"><code>ActionReview.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>knowledge_view.py</code></td>
+<td style="text-align: left;"><code>KnowledgeBaseView.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>persona_view.py</code></td>
+<td style="text-align: left;"><code>PersonaSettingsView.compose</code></td>
+<td style="text-align: left;"><code>()</code> -&gt; <code>ComposeResult</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-feature-execution-lifecycles-feature-function-mapping">4. Feature Execution Lifecycles (Feature-Function Mapping)</h2>
+<p>This section maps Phronel's core features to the execution order and collaboration of their supporting functions.</p>
+<h3 id="41-setup-authentication">4.1. Setup &amp; Authentication</h3>
+<p>This initialization step initializes the configuration database table (<code>AgentConfig</code>) and establishes credentials.
+1. The user runs the <code>interfaces/main.py (init)</code> command or launches the TUI.
+2. <code>core/db.py (init_db)</code> initializes the SQLite database and its tables.
+3. The API keys and system variables input by the user are persisted via <code>core/config.py (ConfigManager.set)</code>.
+4. At runtime, <code>services/x_client.py (XClient._authenticate)</code> is called, fetching credential keys through <code>ConfigManager.get</code>.
+5. Tweepy clients are set up (automatically falling back to Mock mode if keys are missing).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>[User CLI] -&gt; init() 
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>                 |
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>                 v
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>            init_db() -&gt; SQLite Database Created
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>                 |
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>                 v
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>            ConfigManager.set() -&gt; Save X &amp; LLM API Keys
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                 |
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        (On First API call)
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>                 v
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>            XClient._authenticate() -&gt; Setup Tweepy V2 / V1.1 client
+</code></pre></div>
+<h3 id="42-ingesting-knowledge-rag">4.2. Ingesting Knowledge (RAG)</h3>
+<p>Ingests and indexes user materials (such as Markdown or plain text files) and web URLs to enable highly accurate generation.
+1. A source path or URL is provided via the <code>interfaces/main.py (learn)</code> / <code>(learn-url)</code> commands or TUI modal.
+2. <code>services/knowledge.py (KnowledgeBase.add_document)</code> or <code>add_url</code> is invoked.
+3. <code>RecursiveCharacterTextSplitter</code> segments the text into clean semantic chunks.
+4. Chunks are registered in <code>ChromaDB</code> (the vector store).
+5. Concurrently, the same chunk content is stored in the SQLite <code>KnowledgeChunk</code> table with source metadata.
+6. During subsequent post and reply generation, <code>skills/brain.py (Creator._get_knowledge)</code> calls <code>KnowledgeBase.query</code> to semantically retrieve matching high-relevance chunks.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[Markdown Document] -&gt; phronel learn &lt;path&gt;
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>                             |
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>                             v
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>                 KnowledgeBase.add_document()
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>                             |
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>         +-------------------+-------------------+
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>         | (Vector Space)                        | (Relational database)
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>         v                                       v
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ChromaDB (PersistentClient)             SQLite (KnowledgeChunk table)
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>         |                                       |
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>         +-------------------+-------------------+
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>                             |
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>                   (During Content Generation)
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>                             v
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>                 KnowledgeBase.query() -&gt; context chunks injected to DSPy prompt
+</code></pre></div>
+<h3 id="43-cognitive-pipeline-observe-strategize-propose">4.3. Cognitive Pipeline (Observe ➔ Strategize ➔ Propose)</h3>
+<p>A recurring pipeline that monitors target trends and logs recommended action proposals to the database.
+1. Triggered by a periodic background timer or manual command (<code>interfaces/main.py (observe)</code>).
+2. <code>skills/observer.py (Observer.observe_keyword)</code> starts, retrieving target tweets using <code>services/x_client.py (XClient.search_tweets)</code>.
+3. The retrieved tweets are piped to <code>skills/brain.py (Brain.analyze_timeline)</code>.
+4. The <code>Strategist</code> module analyzes the context using DSPy Chain-of-Thought (<code>AnalyzeTrend</code> Signature) to determine the trend, sentiment, and the best tactical action (e.g., reply or tweet).
+5. Strategic reasoning is documented and saved in SQLite as a <code>StrategyLog</code>.
+6. <code>Creator</code> pulls relevant RAG context and injects the active persona to draft the final tweet or reply body.
+7. The drafted action is saved to the SQLite <code>ActionLog</code> table in a <code>pending</code> state, strongly linked to the <code>StrategyLog</code> via a foreign key, and waits for user review.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a> [Trigger / Timer] -&gt; Observer.observe_keyword()
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>                             |
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>                             v
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>                     XClient.search_tweets() -&gt; Get tweets from X
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>                             |
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>                             v
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>                     Brain.analyze_timeline() 
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>                             | (uses CoT to derive sentiment, topic, action)
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>                             v
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>                     StrategyLog -&gt; Logged to SQLite (Explain &quot;Why&quot; decisions are made)
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>                             |
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>                             v
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>                     Creator.create_tweet() / create_reply() -&gt; Pulls RAG context
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>                             |
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>                             v
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>                     ActionLog -&gt; Saved in SQLite with &quot;pending&quot; status
+</code></pre></div>
+<h3 id="44-review-execution">4.4. Review &amp; Execution</h3>
+<p>Handles draft reviews and final publishing to X.
+1. Users review proposed drafts using <code>interfaces/main.py (actions)</code> or the TUI Action Review view.
+2. When approved, <code>skills/executor.py (approve_action)</code> updates the draft status to <code>approved</code>.
+3. Invoking <code>skills/executor.py (execute_action)</code> triggers publication.
+4. If <code>core/config.py (ConfigManager.get("execution_mode"))</code> is set to <code>dry-run</code>, real API calls are skipped, simulating execution logs safely.
+5. In active modes (<code>manual</code>, <code>semi-auto</code>, <code>auto</code>), <code>services/x_client.py (XClient.post_tweet / reply_to_tweet / like_tweet)</code> publishes the action on X.
+6. Upon successful publication, the draft status updates to <code>executed</code>, raw response payloads are written to <code>result_json</code>, and <code>executed_at</code> is timestamped.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a> [ActionLog: pending] -&gt; TUI / CLI approval
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>                             |
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>                             v
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>                         approve_action() -&gt; ActionLog: approved
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>                             |
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>                             v
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>                         execute_action()
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>                             |
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>                             +-----[execution_mode == &#39;dry-run&#39;]? 
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>                             |        |
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>                             |        v (Yes)
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>                             |     Simulate API payload -&gt; ActionLog: executed (DRY-RUN)
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>                             |
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>                             +-----(No: Real post)
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>                                      |
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>                                      v
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>                                  XClient.post_tweet() -&gt; Post to X
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>                                      |
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>                                      v (Success)
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>                                   Save Response JSON -&gt; ActionLog: executed
+</code></pre></div>
+<h3 id="45-continuous-prompt-optimization-analyst">4.5. Continuous Prompt Optimization (Analyst)</h3>
+<p>The analytical engine that visualizes performance metrics and powers autonomous self-optimization (PDCA cycle).
+*   <strong>Reporting (<code>phronel report</code> / TUI "Generate Report" button)</strong>:
+    1. <code>skills/analyst.py (Analyst.generate_daily_report)</code> is executed.
+    2. Historical <code>ActionLog</code> (executed actions) and matching <code>StrategyLog</code> data for the specified day are gathered from SQLite.
+    3. <code>services/x_client.py (XClient.get_tweet_metrics)</code> is called to retrieve live engagement metrics (likes, impressions, retweets).
+    4. These statistics and insights are structured and fed to the DSPy <code>GenerateDailyReport</code> signature to create a polished, comprehensive Markdown performance report.</p>
+<ul>
+<li><strong>Prompt Optimization (<code>phronel optimize</code> / TUI "Run Optimizer" button)</strong>:<ol>
+<li><code>skills/analyst.py (Analyst.optimize_creator_prompts)</code> is executed.</li>
+<li>Successful high-engagement actions and their matching strategist reasoning are extracted from SQLite as successful demonstrations (Examples).</li>
+<li>Using the DSPy <code>BootstrapFewShot</code> compiler, the Creator's generation modules (such as the <code>GenerateTweet</code> signature) are optimized using these compiled examples.</li>
+<li>The highest-scoring compiled prompts are saved to <code>phronel_ai_agent/core/optimized_creator.json</code>.</li>
+<li>Upon subsequent application boots, <code>Brain._load_optimized_prompts</code> loads this optimized JSON automatically, continuously refining and improving the agent's performance.</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>               (Optimization Triggered)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>                           |
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>                           v
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>               Analyst.optimize_creator_prompts()
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                           |
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>                           v
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>               BootstrapFewShot (DSPy Compiler) -&gt; Trains using high-performing Action logs
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                           |
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                           v
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>               optimized_creator.json (Saves best few-shot demos to disk)
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>                           |
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>              (On Next App/Brain Boot)
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>                           v
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>               Brain._load_optimized_prompts() -&gt; Auto-loads into Creator Module
+</code></pre></div>
+<hr />
+<p>This document is compiled based on the latest codebase of Phronel. Please consult and maintain this specification during future feature development and refactoring to ensure system consistency.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
